@@ -1,0 +1,26 @@
+{
+  "install": [
+    {
+      "source": "choco",
+      "items": []
+    },
+    {
+      "source": "scoop",
+      "items": []
+    },
+    {
+      "source": "winget",
+      "items": []
+    }
+  ],
+  "profile": [
+    {
+      "type": "link",
+      "value": ""
+    },
+    {
+      "type": "content",
+      "value": ""
+    }
+  ]
+}
