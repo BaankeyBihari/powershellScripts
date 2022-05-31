@@ -40,5 +40,20 @@ function wingetManager() {
 }
 
 foreach ($installer in $config.install) {
-    Write-Output $installer
+    switch($installer.source) {
+        "scoop" {
+            Write-Output "Found Scoop"
+            Write-Output $installer.items
+            Write-Output $installer.buckets
+            break
+        }
+        "choco" {
+            Write-Output "Found Chocolatey"
+            break
+        }
+        "winget" {
+            Write-Output "Found Winget"
+            break
+        }
+    }
 }
