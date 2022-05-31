@@ -1,10 +1,6 @@
 {
   "install": [
     {
-      "source": "choco",
-      "items": []
-    },
-    {
       "source": "scoop",
       "items": []
     },
