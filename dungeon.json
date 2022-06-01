@@ -1,10 +1,6 @@
 {
   "install": [
     {
-      "source": "choco",
-      "items": []
-    },
-    {
       "source": "scoop",
       "items": ["sudo"],
       "buckets": [
@@ -12,6 +8,10 @@
           "name": "nerd-fonts"
         }
       ]
+    },
+    {
+      "source": "choco",
+      "items": []
     },
     {
       "source": "winget",
