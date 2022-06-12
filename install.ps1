@@ -5,17 +5,18 @@ try {
     New-Item -Type Directory -Path $projectDir -ErrorAction SilentlyContinue
 }
 catch {
-    Write-Output "Already there"
+    Write-Output "$projectDir already exsists."
 }
 
 $resourcePath = "$env:localappdata/powershellScripts/resource.json"
-rm $resourcePath
+Remove-Item $resourcePath
 
-if($hostname.toLower().contains("dungeon")) {
-    Write-Output "Match"
+if ($hostname.toLower().contains("dungeon")) {
+    Write-Output "Downloading Dungeon Config"
     Invoke-WebRequest -Uri https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/dungeon.json -OutFile $resourcePath
-} else {
-    Write-Output "No Match"
+}
+else {
+    Write-Output "Downloading Other Config"
     Invoke-WebRequest -Uri https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/others.json -OutFile $resourcePath
 }
 
@@ -29,12 +30,13 @@ function scoopManager() {
     catch {
         Write-Output "Installing scoop"
         Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-        irm get.scoop.sh | iex
+        Invoke-RestMethod get.scoop.sh | Invoke-Expression
     }
     foreach ($bucket in $scoopConfig.buckets) {
-        if(Get-Member -inputobject $bucket -name "link" -Membertype Properties) {
+        if (Get-Member -inputobject $bucket -name "link" -Membertype Properties) {
             scoop bucket add $bucket.name $bucket.link
-        } else {
+        }
+        else {
             scoop bucket add $bucket.name
         }
     }
@@ -50,22 +52,39 @@ function chocoManager() {
     }
     catch {
         Write-Output "Installing choco"
-        sudo iex "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
+        sudo Invoke-Expression "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
     }
     foreach ($item in $chocoConfig.items) {
-        sudo iex "choco install $item"
+        sudo Invoke-Expression "choco install $item"
+    }
+    foreach ($item in $chocoConfig.pinned) {
+        sudo Invoke-Expression "choco pin -n $item"
     }
 }
 
 $wingetConfig
 function wingetManager() {
-    foreach ($item in $chocoConfig.items) {
+    foreach ($item in $wingetConfig.items) {
         winget install $item
     }
 }
 
+$adminCommandLineConfig
+function adminCommandLineManager() {
+    foreach ($item in $adminCommandLineConfig.items) {
+        sudo Invoke-Expression "$item"
+    }
+}
+
+$commandLineConfig
+function commandLineManager() {
+    foreach ($item in $commandLineConfig.items) {
+        Invoke-Expression "$item"
+    }
+}
+
 foreach ($installer in $config.install) {
-    switch($installer.source) {
+    switch ($installer.source) {
         "scoop" {
             Write-Output "Found Scoop"
             $scoopConfig = $installer
@@ -82,6 +101,59 @@ foreach ($installer in $config.install) {
             Write-Output "Found Winget"
             $wingetConfig = $installer
             wingetManager
+            break
+        }
+        "adminCommandLine" {
+            Write-Output "Found Admin Command Line"
+            $adminCommandLineConfig = $installer
+            adminCommandLineManager
+            break
+        }
+        "commandLine" {
+            Write-Output "Found Command Line"
+            $commandLineConfig = $installer
+            commandLineManager
+            break
+        }
+    }
+}
+
+if ( Test-Path $Profile.CurrentUserAllHosts ) {
+    # Check and delete old aliases
+    foreach ($profileItem in $config.profile) {
+        $CurrentContent = Get-Content $Profile.CurrentUserAllHosts
+        $ContainsWord = $CurrentContent | ForEach-Object { $_ -match "#---Begin Section: ${profileItem.sectionName}" }
+        if ($containsWord -contains $true) {
+            $saveInstance = $true
+            $UpdatedContent = Get-Content -Path $Profile.CurrentUserAllHosts |
+            ForEach-Object {
+                if ( $_ -match ( '^' + [regex]::Escape( "#---Begin Section: ${profileItem.sectionName}---" ) ) ) {
+                    $saveInstance = $false
+                }
+                elseif ( $_ -match ( '^' + [regex]::Escape( "#---End Section: ${profileItem.sectionName}---" ) ) ) {
+                    $saveInstance = $true
+                }
+                elseif ( $saveInstance ) {
+                    $_
+                }
+            }
+            $UpdatedContent | Out-File -FilePath $Profile.CurrentUserAllHosts -Encoding Default -Force
+        }
+    }
+}
+
+foreach ($profileItem in $config.profile) {
+    switch ($profileItem.type) {
+        "link" {
+            "#---Begin Section: ${profileItem.sectionName}---" >> $Profile.CurrentUserAllHosts
+            (Invoke-webrequest -URI "${profileItem.value}").Content >> $Profile.CurrentUserAllHosts
+            "#---End Section: ${profileItem.sectionName}---" >> $Profile.CurrentUserAllHosts
+            break
+        }
+        "content" {
+            "#---Begin Section: ${profileItem.sectionName}---" >> $Profile.CurrentUserAllHosts
+            "${profileItem.value}" >> $Profile.CurrentUserAllHosts
+            "#---End Section: ${profileItem.sectionName}---" >> $Profile.CurrentUserAllHosts
             break
         }
     }

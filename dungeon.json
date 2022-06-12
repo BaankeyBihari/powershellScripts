@@ -11,21 +11,32 @@
     },
     {
       "source": "choco",
-      "items": []
+      "items": [],
+      "pinned": []
     },
     {
       "source": "winget",
+      "items": []
+    },
+    {
+      "source": "adminCommandLine",
+      "items": []
+    },
+    {
+      "source": "commandLine",
       "items": []
     }
   ],
   "profile": [
     {
+      "sectionName": "linkedDrama",
       "type": "link",
-      "value": ""
+      "value": "https://gist.githubusercontent.com/BaankeyBihari/7e78c39bb8e8c3c4f7c3b6001e7eacfb/raw/6ff594b4cbab6df4c7e5a953d807dd90b0bf3320/golang%2520Inputs"
     },
     {
+      "sectionName": "Drama",
       "type": "content",
-      "value": ""
+      "value": "Drama"
     }
   ]
 }
