@@ -11,12 +11,33 @@
     },
     {
       "source": "choco",
-      "items": [],
+      "items": [
+        "adb",
+        "hfs"
+      ],
       "pinned": []
     },
     {
       "source": "winget",
-      "items": []
+      "items": [
+        "7zip.7zip",
+        "Maximus5.ConEmu",
+        "Notepad++.Notepad++",
+        "ScooterSoftware.BeyondCompare4",
+        "GIMP.GIM",
+        "Logitech.LGS",
+        "CPUID.CPU-Z",
+        "ALCPU.CoreTemp",
+        "CPUID.HWMonitor",
+        "ChristianSchenk.MiKTeX",
+        "CoreyButler.NVMforWindows",
+        "RicoSuter.NSwagStudio",
+        "Postman.Postman",
+        "OpenWhisperSystems.Signal",
+        "Stretchly.Stretchly",
+        "Tonec.InternetDownloadManager",
+        "Docker.DockerDesktop"
+      ]
     },
     {
       "source": "adminCommandLine",

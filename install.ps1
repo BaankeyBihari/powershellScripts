@@ -65,7 +65,7 @@ function chocoManager() {
 $wingetConfig
 function wingetManager() {
     foreach ($item in $wingetConfig.items) {
-        winget install $item
+        winget install -e --id $item
     }
 }
 
@@ -121,16 +121,17 @@ foreach ($installer in $config.install) {
 if ( Test-Path $Profile.CurrentUserAllHosts ) {
     # Check and delete old aliases
     foreach ($profileItem in $config.profile) {
+        $sectionName = $profileItem.sectionName
         $CurrentContent = Get-Content $Profile.CurrentUserAllHosts
-        $ContainsWord = $CurrentContent | ForEach-Object { $_ -match "#---Begin Section: ${profileItem.sectionName}" }
+        $ContainsWord = $CurrentContent | ForEach-Object { $_ -match "#---Begin Section: $sectionName" }
         if ($containsWord -contains $true) {
             $saveInstance = $true
             $UpdatedContent = Get-Content -Path $Profile.CurrentUserAllHosts |
             ForEach-Object {
-                if ( $_ -match ( '^' + [regex]::Escape( "#---Begin Section: ${profileItem.sectionName}---" ) ) ) {
+                if ( $_ -match ( '^' + [regex]::Escape( "#---Begin Section: $sectionName---" ) ) ) {
                     $saveInstance = $false
                 }
-                elseif ( $_ -match ( '^' + [regex]::Escape( "#---End Section: ${profileItem.sectionName}---" ) ) ) {
+                elseif ( $_ -match ( '^' + [regex]::Escape( "#---End Section: $sectionName---" ) ) ) {
                     $saveInstance = $true
                 }
                 elseif ( $saveInstance ) {
@@ -143,17 +144,19 @@ if ( Test-Path $Profile.CurrentUserAllHosts ) {
 }
 
 foreach ($profileItem in $config.profile) {
+    $sectionName = $profileItem.sectionName
+    $value = $profileItem.value
     switch ($profileItem.type) {
         "link" {
-            "#---Begin Section: ${profileItem.sectionName}---" >> $Profile.CurrentUserAllHosts
-            (Invoke-webrequest -URI "${profileItem.value}").Content >> $Profile.CurrentUserAllHosts
-            "#---End Section: ${profileItem.sectionName}---" >> $Profile.CurrentUserAllHosts
+            "#---Begin Section: $sectionName---" >> $Profile.CurrentUserAllHosts
+            (Invoke-webrequest -URI "$value").Content >> $Profile.CurrentUserAllHosts
+            "#---End Section: $sectionName---" >> $Profile.CurrentUserAllHosts
             break
         }
         "content" {
-            "#---Begin Section: ${profileItem.sectionName}---" >> $Profile.CurrentUserAllHosts
-            "${profileItem.value}" >> $Profile.CurrentUserAllHosts
-            "#---End Section: ${profileItem.sectionName}---" >> $Profile.CurrentUserAllHosts
+            "#---Begin Section: $sectionName---" >> $Profile.CurrentUserAllHosts
+            "$value" >> $Profile.CurrentUserAllHosts
+            "#---End Section: $sectionName---" >> $Profile.CurrentUserAllHosts
             break
         }
     }
