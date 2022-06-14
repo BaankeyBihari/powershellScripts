@@ -24,7 +24,7 @@
         "Maximus5.ConEmu",
         "Notepad++.Notepad++",
         "ScooterSoftware.BeyondCompare4",
-        "GIMP.GIM",
+        "GIMP.GIMP",
         "Logitech.LGS",
         "CPUID.CPU-Z",
         "ALCPU.CoreTemp",
@@ -36,7 +36,23 @@
         "OpenWhisperSystems.Signal",
         "Stretchly.Stretchly",
         "Tonec.InternetDownloadManager",
-        "Docker.DockerDesktop"
+        "Docker.DockerDesktop",
+        "TeXstudio.TeXstudio",
+        "YACReader.YACReader",
+        "LyX.LyX",
+        "Valve.Steam",
+        "Anaconda.Miniconda3",
+        "Microsoft.VisualStudioCode",
+        "Microsoft.VisualStudio.2022.Community",
+        "MarkText.MarkText",
+        "WhatsApp.WhatsApp",
+        "Microsoft.WindowsTerminal",
+        "Microsoft.PowerShell",
+        "JanDeDobbeleer.OhMyPosh",
+        "Amazon.Kindle",
+        "Plex.PlexMediaServer",
+        "calibre.calibre",
+        "Git.Git"
       ]
     },
     {
@@ -50,14 +66,14 @@
   ],
   "profile": [
     {
-      "sectionName": "linkedDrama",
+      "sectionName": "Get-ChocoUpgrade",
       "type": "link",
       "value": "https://gist.githubusercontent.com/BaankeyBihari/7e78c39bb8e8c3c4f7c3b6001e7eacfb/raw/6ff594b4cbab6df4c7e5a953d807dd90b0bf3320/golang%2520Inputs"
     },
     {
       "sectionName": "Drama",
       "type": "content",
-      "value": "Drama"
+      "value": "# No Content"
     }
   ]
 }

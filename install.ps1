@@ -1,3 +1,5 @@
+#Requires -Version 7
+
 $hostname = hostname
 
 $projectDir = "$env:localappdata/powershellScripts/"
