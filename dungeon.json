@@ -11,48 +11,56 @@
     },
     {
       "source": "choco",
-      "items": [
-        "adb",
-        "hfs"
-      ],
+      "items": ["adb"],
       "pinned": []
     },
     {
       "source": "winget",
       "items": [
-        "7zip.7zip",
-        "Maximus5.ConEmu",
-        "Notepad++.Notepad++",
-        "ScooterSoftware.BeyondCompare4",
-        "GIMP.GIMP",
-        "Logitech.LGS",
-        "CPUID.CPU-Z",
         "ALCPU.CoreTemp",
-        "CPUID.HWMonitor",
+        "Amazon.Kindle",
+        "Anaconda.Miniconda3",
+        "Apple.iTunes",
+        "calibre.calibre",
         "ChristianSchenk.MiKTeX",
         "CoreyButler.NVMforWindows",
-        "RicoSuter.NSwagStudio",
-        "Postman.Postman",
-        "OpenWhisperSystems.Signal",
-        "Stretchly.Stretchly",
-        "Tonec.InternetDownloadManager",
+        "CPUID.CPU-Z",
+        "CPUID.HWMonitor",
         "Docker.DockerDesktop",
-        "TeXstudio.TeXstudio",
-        "YACReader.YACReader",
-        "LyX.LyX",
-        "Valve.Steam",
-        "Anaconda.Miniconda3",
-        "Microsoft.VisualStudioCode",
-        "Microsoft.VisualStudio.2022.Community",
-        "MarkText.MarkText",
-        "WhatsApp.WhatsApp",
-        "Microsoft.WindowsTerminal",
-        "Microsoft.PowerShell",
+        "GIMP.GIMP",
+        "Git.Git",
+        "Google.Chrome",
         "JanDeDobbeleer.OhMyPosh",
-        "Amazon.Kindle",
+        "KDE.Okular",
+        "Logitech.LGS",
+        "LyX.LyX",
+        "marha.VcXsrv",
+        "MarkText.MarkText",
+        "Maximus5.ConEmu",
+        "Microsoft.BingWallpaper",
+        "Microsoft.PowerShell",
+        "Microsoft.VisualStudio.2022.Community",
+        "Microsoft.VisualStudioCode",
+        "Microsoft.WindowsTerminal",
+        "Notepad++.Notepad++",
+        "OBSProject.OBSStudio",
+        "OpenWhisperSystems.Signal",
         "Plex.PlexMediaServer",
-        "calibre.calibre",
-        "Git.Git"
+        "Postman.Postman",
+        "qBittorrent.qBittorrent",
+        "RicoSuter.NSwagStudio",
+        "ScooterSoftware.BeyondCompare4",
+        "SlackTechnologies.Slack",
+        "Spotify.Spotify",
+        "Stretchly.Stretchly",
+        "TeXstudio.TeXstudio",
+        "Tonec.InternetDownloadManager",
+        "Valve.Steam",
+        "VideoLAN.VLC",
+        "WhatsApp.WhatsApp",
+        "YACReader.YACReader",
+        "ZoomUMX",
+        "7zip.7zip"
       ]
     },
     {
@@ -68,7 +76,22 @@
     {
       "sectionName": "Get-ChocoUpgrade",
       "type": "link",
-      "value": "https://gist.githubusercontent.com/BaankeyBihari/7e78c39bb8e8c3c4f7c3b6001e7eacfb/raw/6ff594b4cbab6df4c7e5a953d807dd90b0bf3320/golang%2520Inputs"
+      "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Get-ChocoUpgrade.ps1"
+    },
+    {
+      "sectionName": "Get-ProfileUpdate",
+      "type": "link",
+      "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Get-ProfileUpdate.ps1"
+    },
+    {
+      "sectionName": "Reset-BeyondCompare",
+      "type": "link",
+      "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Reset-BeyondCompare.ps1"
+    },
+    {
+      "sectionName": "Start-ADBDaemon",
+      "type": "link",
+      "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Start-ADBDaemon.ps1"
     },
     {
       "sectionName": "Drama",
