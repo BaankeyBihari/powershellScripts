@@ -2,7 +2,7 @@
   "install": [
     {
       "source": "scoop",
-      "items": ["sudo"],
+      "items": ["sudo", "Meslo-NF", "firacode"],
       "buckets": [
         {
           "name": "nerd-fonts"

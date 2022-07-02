@@ -67,7 +67,18 @@ function chocoManager() {
 $wingetConfig
 function wingetManager() {
     foreach ($item in $wingetConfig.items) {
-        winget install -e --id $item
+        $wingetInstalledTest = winget list $item
+        $wingetInstallationFound = $wingetInstalledTest | ForEach-Object {
+            if ($_ -eq "No installed package found matching input criteria.") {
+                Write-Output $_
+            }
+        }
+        if ($wingetInstallationFound -eq "No installed package found matching input criteria.") {
+            Write-Output "Installing $item using winget"
+            winget install -e --id $item
+        } else {
+            Write-Output "Skipping installation of $item"
+        }
     }
 }
 
