@@ -23,7 +23,6 @@
         "Apple.iTunes",
         "calibre.calibre",
         "ChristianSchenk.MiKTeX",
-        "CoreyButler.NVMforWindows",
         "CPUID.CPU-Z",
         "CPUID.HWMonitor",
         "Docker.DockerDesktop",
@@ -69,7 +68,10 @@
     },
     {
       "source": "commandLine",
-      "items": []
+      "items": [
+        "conda init powershell",
+        "conda config --set auto_activate_base false"
+      ]
     }
   ],
   "profile": [
@@ -97,6 +99,11 @@
       "sectionName": "Drama",
       "type": "content",
       "value": "# No Content"
+    },
+    {
+      "sectionName": "oh-my-posh",
+      "type": "commandLine",
+      "items": ["oh-my-posh init pwsh --config \"$env:POSH_THEMES_PATH\\M365Princess.omp.json\""]
     }
   ]
 }

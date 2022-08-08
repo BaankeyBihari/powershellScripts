@@ -76,7 +76,8 @@ function wingetManager() {
         if ($wingetInstallationFound -eq "No installed package found matching input criteria.") {
             Write-Output "Installing $item using winget"
             winget install -e --id $item
-        } else {
+        }
+        else {
             Write-Output "Skipping installation of $item"
         }
     }
@@ -156,10 +157,11 @@ if ( Test-Path $Profile.CurrentUserAllHosts ) {
     }
 }
 
-foreach ($profileItem in $config.profile) {
-    $sectionName = $profileItem.sectionName
-    $value = $profileItem.value
-    switch ($profileItem.type) {
+$profileValues
+function profileWriter() {
+    $sectionName = $profileValues.sectionName
+    $value = $profileValues.value
+    switch ($profileValues.type) {
         "link" {
             "#---Begin Section: $sectionName---" >> $Profile.CurrentUserAllHosts
             (Invoke-webrequest -URI "$value").Content >> $Profile.CurrentUserAllHosts
@@ -172,5 +174,25 @@ foreach ($profileItem in $config.profile) {
             "#---End Section: $sectionName---" >> $Profile.CurrentUserAllHosts
             break
         }
+        "commandLine" {
+            $commandLineConfig = $profileValues
+            "#---Begin Section: $sectionName---" >> $Profile.CurrentUserAllHosts
+            commandLineManager >> $Profile.CurrentUserAllHosts
+            "#---End Section: $sectionName---" >> $Profile.CurrentUserAllHosts
+            break
+        }
+        "adminCommandLine" {
+            $adminCommandLineConfig = $profileValues
+            "#---Begin Section: $sectionName---" >> $Profile.CurrentUserAllHosts
+            adminCommandLineManager >> $Profile.CurrentUserAllHosts
+            "#---End Section: $sectionName---" >> $Profile.CurrentUserAllHosts
+            break
+        }
     }
 }
+
+foreach ($profileItem in $config.profile) {
+    $profileValues = $profileItem
+    profileWriter
+}
+
