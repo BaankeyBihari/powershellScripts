@@ -2,7 +2,7 @@
   "install": [
     {
       "source": "scoop",
-      "items": ["sudo", "Meslo-NF", "firacode"],
+      "items": ["sudo"],
       "buckets": [
         {
           "name": "nerd-fonts"
@@ -22,12 +22,12 @@
         "Anaconda.Miniconda3",
         "Apple.iTunes",
         "calibre.calibre",
+        "Chocolatey.ChocolateyGUI",
         "ChristianSchenk.MiKTeX",
-        "CPUID.CPU-Z",
-        "CPUID.HWMonitor",
         "Docker.DockerDesktop",
         "GIMP.GIMP",
         "Git.Git",
+        "GoLang.Go",
         "Google.Chrome",
         "JanDeDobbeleer.OhMyPosh",
         "KDE.Okular",
@@ -41,14 +41,16 @@
         "Microsoft.VisualStudio.2022.Community",
         "Microsoft.VisualStudioCode",
         "Microsoft.WindowsTerminal",
+        "Mozilla.Firefox",
         "Notepad++.Notepad++",
         "OBSProject.OBSStudio",
         "OpenWhisperSystems.Signal",
         "Plex.PlexMediaServer",
         "Postman.Postman",
         "qBittorrent.qBittorrent",
-        "RicoSuter.NSwagStudio",
+        "Rustlang.Rustup",
         "ScooterSoftware.BeyondCompare4",
+        "Schniz.fnm",
         "SlackTechnologies.Slack",
         "Spotify.Spotify",
         "Stretchly.Stretchly",
@@ -58,7 +60,7 @@
         "VideoLAN.VLC",
         "WhatsApp.WhatsApp",
         "YACReader.YACReader",
-        "ZoomUMX",
+        "Zoom.Zoom",
         "7zip.7zip"
       ]
     },
@@ -99,11 +101,6 @@
       "sectionName": "Drama",
       "type": "content",
       "value": "# No Content"
-    },
-    {
-      "sectionName": "oh-my-posh",
-      "type": "commandLine",
-      "items": ["oh-my-posh init pwsh --config \"$env:POSH_THEMES_PATH\\M365Princess.omp.json\""]
     }
   ]
 }

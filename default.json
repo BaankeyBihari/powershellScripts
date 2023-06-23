@@ -1,0 +1,19 @@
+{
+  "install": [
+    {
+      "source": "winget",
+      "items": ["Chocolatey.ChocolateyGUI"]
+    },
+    {
+      "source": "scoop",
+      "items": ["main/sudo"]
+    }
+  ],
+  "profile": [
+    {
+      "sectionName": "Get-ProfileUpdate",
+      "type": "link",
+      "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Get-ProfileUpdate.ps1"
+    }
+  ]
+}
