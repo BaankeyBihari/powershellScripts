@@ -22,6 +22,16 @@ else {
     Invoke-WebRequest -Uri https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/others.json -OutFile $resourcePath
 }
 
+
+try {
+    Get-Command scoop -ErrorAction Stop
+}
+catch {
+    Write-Output "Installing scoop"
+    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+    Invoke-RestMethod get.scoop.sh | Invoke-Expression
+}
+
 # $config = Get-Content $resourcePath -Raw | ConvertFrom-Json
 
 # $scoopConfig
