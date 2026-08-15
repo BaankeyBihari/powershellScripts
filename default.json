@@ -19,7 +19,6 @@
       "items": [
         "7zip.7zip",
         "ALCPU.CoreTemp",
-        "Amazon.Kindle",
         "Anaconda.Miniconda3",
         "Anthropic.ClaudeCode",
         "AutoHotkey.AutoHotkey",
@@ -69,7 +68,7 @@
     },
     {
       "source": "msstore",
-      "items": ["9PFHDD62MXS1", "9NP83LWLPZ9K"]
+      "items": ["9PFHDD62MXS1", "9NP83LWLPZ9K", "9P8JQ0JJSTLL"]
     },
     {
       "source": "adminCommandLine",
