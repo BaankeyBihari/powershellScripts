@@ -93,23 +93,6 @@ function scoopInstaller() {
     }
 }
 
-$chocoConfig
-function chocoInstaller() {
-    try {
-        Get-Command choco -ErrorAction Stop
-    }
-    catch {
-        Write-Output "Installing choco"
-        winget install -e --id Chocolatey.Chocolatey
-    }
-    foreach ($item in $chocoConfig.items) {
-        sudo Invoke-Expression "choco install $item"
-    }
-    foreach ($item in $chocoConfig.pinned) {
-        sudo Invoke-Expression "choco pin -n $item"
-    }
-}
-
 # Execute from admin command line
 $adminCommandLineConfig
 function adminCommandLineLauncher() {
@@ -132,12 +115,6 @@ foreach ($installer in $config.install) {
             Write-Output "Found Scoop"
             $scoopConfig = $installer
             scoopInstaller
-            break
-        }
-        "choco" {
-            Write-Output "Found Chocolatey"
-            $chocoConfig = $installer
-            chocoInstaller
             break
         }
         "winget" {

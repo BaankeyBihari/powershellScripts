@@ -10,16 +10,10 @@
       ]
     },
     {
-      "source": "choco",
-      "items": ["adb"],
-      "pinned": []
-    },
-    {
       "source": "winget",
       "items": [
         "7zip.7zip",
         "ALCPU.CoreTemp",
-        "Anaconda.Miniconda3",
         "Anthropic.ClaudeCode",
         "AutoHotkey.AutoHotkey",
         "calibre.calibre",
@@ -31,6 +25,7 @@
         "GitHub.cli",
         "GoLang.Go",
         "Google.Chrome",
+        "Google.PlatformTools",
         "JanDeDobbeleer.OhMyPosh",
         "KDE.Okular",
         "Logitech.OptionsPlus",
@@ -76,7 +71,7 @@
     },
     {
       "source": "commandLine",
-      "items": ["conda init powershell", "conda config --set auto_activate_base false"]
+      "items": []
     }
   ],
   "profile": [
