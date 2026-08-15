@@ -49,6 +49,26 @@ function wingetInstaller() {
     }
 }
 
+# Install Microsoft Store Apps
+$msstoreConfig
+function msstoreInstaller() {
+    foreach ($item in $msstoreConfig.items) {
+        $msstoreInstalledTest = winget list --source msstore $item
+        $msstoreInstallationFound = $msstoreInstalledTest | ForEach-Object {
+            if ($_ -eq "No installed package found matching input criteria.") {
+                Write-Output $_
+            }
+        }
+        if ($msstoreInstallationFound -eq "No installed package found matching input criteria.") {
+            Write-Output "Installing $item using Microsoft Store"
+            winget install -e --source msstore --id $item --accept-source-agreements --accept-package-agreements
+        }
+        else {
+            Write-Output "Skipping installation of $item"
+        }
+    }
+}
+
 # Install Scoop Apps
 $scoopConfig
 function scoopInstaller() {
@@ -124,6 +144,12 @@ foreach ($installer in $config.install) {
             Write-Output "Found Winget"
             $wingetConfig = $installer
             wingetInstaller
+            break
+        }
+        "msstore" {
+            Write-Output "Found Microsoft Store"
+            $msstoreConfig = $installer
+            msstoreInstaller
             break
         }
         "adminCommandLine" {

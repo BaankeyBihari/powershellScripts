@@ -5,5 +5,6 @@ function Get-ProfileUpdate {
         [Parameter(Mandatory = $false)]
         [string]$installUri = "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/install.ps1"
     )
-    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString($resourceUri) + " -resourceUri $resourceUri -installUri $installUri")
+    $scriptBlock = [ScriptBlock]::Create((New-Object System.Net.WebClient).DownloadString($installUri))
+    & $scriptBlock -resourceUri $resourceUri -installUri $installUri
 }

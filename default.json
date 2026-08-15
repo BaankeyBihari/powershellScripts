@@ -1,19 +1,110 @@
 {
   "install": [
     {
-      "source": "winget",
-      "items": ["Chocolatey.ChocolateyGUI"]
+      "source": "scoop",
+      "items": ["sudo"],
+      "buckets": [
+        {
+          "name": "nerd-fonts"
+        }
+      ]
     },
     {
-      "source": "scoop",
-      "items": ["main/sudo"]
+      "source": "choco",
+      "items": ["adb"],
+      "pinned": []
+    },
+    {
+      "source": "winget",
+      "items": [
+        "7zip.7zip",
+        "ALCPU.CoreTemp",
+        "Amazon.Kindle",
+        "Anaconda.Miniconda3",
+        "Anthropic.ClaudeCode",
+        "AutoHotkey.AutoHotkey",
+        "calibre.calibre",
+        "Chocolatey.ChocolateyGUI",
+        "ChristianSchenk.MiKTeX",
+        "Docker.DockerDesktop",
+        "GIMP.GIMP",
+        "Git.Git",
+        "GitHub.cli",
+        "GoLang.Go",
+        "Google.Chrome",
+        "JanDeDobbeleer.OhMyPosh",
+        "KDE.Okular",
+        "Logitech.OptionsPlus",
+        "LyX.LyX",
+        "marha.VcXsrv",
+        "MarkText.MarkText",
+        "Microsoft.BingWallpaper",
+        "Microsoft.PowerShell",
+        "Microsoft.VisualStudio.2022.Community",
+        "Microsoft.VisualStudioCode",
+        "Microsoft.WindowsTerminal",
+        "Microsoft.WSL",
+        "Mozilla.Firefox",
+        "Notepad++.Notepad++",
+        "OBSProject.OBSStudio",
+        "Ollama.Ollama",
+        "OpenWhisperSystems.Signal",
+        "Plex.PlexMediaServer",
+        "Postman.Postman",
+        "qBittorrent.qBittorrent",
+        "Rustlang.Rustup",
+        "Schniz.fnm",
+        "ScooterSoftware.BeyondCompare.4",
+        "SlackTechnologies.Slack",
+        "Spotify.Spotify",
+        "Stretchly.Stretchly",
+        "TeXstudio.TeXstudio",
+        "Tonec.InternetDownloadManager",
+        "Valve.Steam",
+        "VideoLAN.VLC",
+        "WhatsApp.WhatsApp",
+        "YACReader.YACReader",
+        "Zoom.Zoom"
+      ]
+    },
+    {
+      "source": "msstore",
+      "items": ["9PFHDD62MXS1", "9NP83LWLPZ9K"]
+    },
+    {
+      "source": "adminCommandLine",
+      "items": []
+    },
+    {
+      "source": "commandLine",
+      "items": ["conda init powershell", "conda config --set auto_activate_base false"]
     }
   ],
   "profile": [
     {
+      "sectionName": "Get-WingetUpgrade",
+      "type": "link",
+      "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Get-WingetUpgrade.ps1"
+    },
+    {
       "sectionName": "Get-ProfileUpdate",
       "type": "link",
       "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Get-ProfileUpdate.ps1"
+    },
+    {
+      "sectionName": "Reset-BeyondCompare",
+      "type": "link",
+      "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Reset-BeyondCompare.ps1"
+    },
+    {
+      "sectionName": "Start-ADBDaemon",
+      "type": "link",
+      "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Start-ADBDaemon.ps1"
+    },
+    {
+      "sectionName": "Drama",
+      "type": "content",
+      "value": "# No Content"
     }
   ]
 }
