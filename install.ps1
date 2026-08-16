@@ -29,117 +29,132 @@ Invoke-WebRequest -Uri "${resourceUri}" -OutFile $resourcePath
 # Config for Installers
 $config = Get-Content $resourcePath -Raw | ConvertFrom-Json
 
-# Install Winget Apps
-$wingetConfig
-function wingetInstaller() {
-    foreach ($item in $wingetConfig.items) {
-        $wingetInstalledTest = winget list $item
-        $wingetInstallationFound = $wingetInstalledTest | ForEach-Object {
-            if ($_ -eq "No installed package found matching input criteria.") {
-                Write-Output $_
+function Test-PackageInstalled($source, $item) {
+    switch ($source) {
+        "winget" {
+            $result = winget list --id $item --exact --accept-source-agreements
+            return -not ($result -match "No installed package found matching input criteria.")
+        }
+        "msstore" {
+            $result = winget list --id $item --exact --source msstore --accept-source-agreements
+            return -not ($result -match "No installed package found matching input criteria.")
+        }
+        "scoop" {
+            if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+                return $false
             }
+            $result = scoop list $item 6>$null
+            return [bool]($result | Select-String -Pattern "^$([regex]::Escape($item))\s")
         }
-        if ($wingetInstallationFound -eq "No installed package found matching input criteria.") {
-            Write-Output "Installing $item using winget"
-            winget install -e --id $item
-        }
-        else {
-            Write-Output "Skipping installation of $item"
+        default {
+            return $false
         }
     }
 }
 
-# Install Microsoft Store Apps
-$msstoreConfig
-function msstoreInstaller() {
-    foreach ($item in $msstoreConfig.items) {
-        $msstoreInstalledTest = winget list --source msstore $item
-        $msstoreInstallationFound = $msstoreInstalledTest | ForEach-Object {
-            if ($_ -eq "No installed package found matching input criteria.") {
-                Write-Output $_
-            }
-        }
-        if ($msstoreInstallationFound -eq "No installed package found matching input criteria.") {
-            Write-Output "Installing $item using Microsoft Store"
-            winget install -e --source msstore --id $item --accept-source-agreements --accept-package-agreements
-        }
-        else {
-            Write-Output "Skipping installation of $item"
-        }
+# Build a plan across winget/msstore/scoop: what's already there vs what's missing,
+# split into required (always installed) and optional (gated behind a prompt)
+$plan = @()
+foreach ($installer in $config.install) {
+    if ($installer.source -notin @("winget", "msstore", "scoop")) {
+        continue
+    }
+    foreach ($item in $installer.items) {
+        $plan += [PSCustomObject]@{ Source = $installer.source; Item = $item; Required = $true }
+    }
+    foreach ($item in $installer.optional) {
+        $plan += [PSCustomObject]@{ Source = $installer.source; Item = $item; Required = $false }
     }
 }
 
-# Install Scoop Apps
-$scoopConfig
-function scoopInstaller() {
-    try {
-        Get-Command scoop -ErrorAction Stop
+Write-Output "Detecting what's already installed..."
+foreach ($entry in $plan) {
+    $entry | Add-Member -NotePropertyName AlreadyInstalled -NotePropertyValue (Test-PackageInstalled $entry.Source $entry.Item)
+}
+
+$alreadyInstalled = @($plan | Where-Object { $_.AlreadyInstalled })
+$missingRequired = @($plan | Where-Object { -not $_.AlreadyInstalled -and $_.Required })
+$missingOptional = @($plan | Where-Object { -not $_.AlreadyInstalled -and -not $_.Required })
+
+Write-Output ""
+Write-Output "=== Detected ==="
+Write-Output "Already installed: $($alreadyInstalled.Count)"
+Write-Output "Needs installation (required): $($missingRequired.Count)"
+$missingRequired | ForEach-Object { Write-Output "  - $($_.Item) [$($_.Source)]" }
+Write-Output "Needs installation (optional): $($missingOptional.Count)"
+$missingOptional | ForEach-Object { Write-Output "  - $($_.Item) [$($_.Source)]" }
+Write-Output ""
+
+$toInstall = @() + $missingRequired
+if ($missingOptional.Count -gt 0) {
+    $response = Read-Host "Install $($missingOptional.Count) optional package(s) too? [y/N]"
+    if ($response -match "^[Yy]") {
+        $toInstall += $missingOptional
     }
-    catch {
-        Write-Output "Installing scoop"
-        Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-        Invoke-RestMethod get.scoop.sh | Invoke-Expression
+    else {
+        Write-Output "Skipping optional packages; installing required only."
     }
-    foreach ($bucket in $scoopConfig.buckets) {
-        if (Get-Member -inputobject $bucket -name "link" -Membertype Properties) {
-            scoop bucket add $bucket.name $bucket.link
+}
+
+$total = $toInstall.Count
+$i = 0
+foreach ($entry in $toInstall) {
+    $i++
+    Write-Output "[$i/$total] Installing $($entry.Item) via $($entry.Source)..."
+    switch ($entry.Source) {
+        "winget" {
+            winget install -e --id $entry.Item --accept-source-agreements --accept-package-agreements
         }
-        else {
-            scoop bucket add $bucket.name
+        "msstore" {
+            winget install -e --source msstore --id $entry.Item --accept-source-agreements --accept-package-agreements
+        }
+        "scoop" {
+            if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+                Write-Output "Installing scoop"
+                Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+                Invoke-RestMethod get.scoop.sh | Invoke-Expression
+            }
+            scoop install $entry.Item
         }
     }
-    foreach ($item in $scoopConfig.items) {
-        scoop install $item
+}
+if ($total -gt 0) {
+    Write-Output "Done: $i/$total installed."
+}
+
+# Scoop buckets are cheap/idempotent, so these are added regardless of the required/optional choice
+foreach ($installer in $config.install) {
+    if ($installer.source -eq "scoop" -and $installer.buckets) {
+        if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+            Write-Output "Installing scoop"
+            Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+            Invoke-RestMethod get.scoop.sh | Invoke-Expression
+        }
+        foreach ($bucket in $installer.buckets) {
+            if (Get-Member -inputobject $bucket -name "link" -Membertype Properties) {
+                scoop bucket add $bucket.name $bucket.link
+            }
+            else {
+                scoop bucket add $bucket.name
+            }
+        }
     }
 }
 
 # Execute from admin command line
-$adminCommandLineConfig
-function adminCommandLineLauncher() {
-    foreach ($item in $adminCommandLineConfig.items) {
-        sudo Invoke-Expression "$item"
+foreach ($installer in $config.install) {
+    if ($installer.source -eq "adminCommandLine") {
+        foreach ($item in $installer.items) {
+            sudo Invoke-Expression "$item"
+        }
     }
 }
 
 # Execute from command line
-$commandLineConfig
-function commandLineLauncher() {
-    foreach ($item in $commandLineConfig.items) {
-        Invoke-Expression "$item"
-    }
-}
-
 foreach ($installer in $config.install) {
-    switch ($installer.source) {
-        "scoop" {
-            Write-Output "Found Scoop"
-            $scoopConfig = $installer
-            scoopInstaller
-            break
-        }
-        "winget" {
-            Write-Output "Found Winget"
-            $wingetConfig = $installer
-            wingetInstaller
-            break
-        }
-        "msstore" {
-            Write-Output "Found Microsoft Store"
-            $msstoreConfig = $installer
-            msstoreInstaller
-            break
-        }
-        "adminCommandLine" {
-            Write-Output "Found Admin Command Line"
-            $adminCommandLineConfig = $installer
-            adminCommandLineLauncher
-            break
-        }
-        "commandLine" {
-            Write-Output "Found Command Line"
-            $commandLineConfig = $installer
-            commandLineLauncher
-            break
+    if ($installer.source -eq "commandLine") {
+        foreach ($item in $installer.items) {
+            Invoke-Expression "$item"
         }
     }
 }
@@ -194,4 +209,3 @@ foreach ($profileItem in $config.profile) {
     $profileValues = $profileItem
     profileWriter
 }
-

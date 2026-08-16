@@ -3,6 +3,7 @@
     {
       "source": "scoop",
       "items": ["sudo"],
+      "optional": [],
       "buckets": [
         {
           "name": "nerd-fonts"
@@ -13,32 +14,35 @@
       "source": "winget",
       "items": [
         "7zip.7zip",
-        "ALCPU.CoreTemp",
         "Anthropic.ClaudeCode",
         "AutoHotkey.AutoHotkey",
-        "calibre.calibre",
-        "MiKTeX.MiKTeX",
-        "Docker.DockerDesktop",
-        "GIMP.GIMP",
         "Git.Git",
         "GitHub.cli",
-        "GoLang.Go",
-        "Google.Chrome",
         "Google.PlatformTools",
         "JanDeDobbeleer.OhMyPosh",
+        "Microsoft.PowerShell",
+        "Microsoft.VisualStudioCode",
+        "Microsoft.WindowsTerminal",
+        "Microsoft.WSL",
+        "Schniz.fnm",
+        "ScooterSoftware.BeyondCompare.4"
+      ],
+      "optional": [
+        "ALCPU.CoreTemp",
+        "calibre.calibre",
+        "Docker.DockerDesktop",
+        "GIMP.GIMP",
+        "GoLang.Go",
+        "Google.Chrome",
         "KDE.Okular",
         "Logitech.OptionsPlus",
         "LyX.LyX",
         "marha.VcXsrv",
         "MarkText.MarkText",
         "Microsoft.BingWallpaper",
-        "Microsoft.PowerShell",
         "Microsoft.VisualStudio.2022.Community",
-        "Microsoft.VisualStudioCode",
-        "Microsoft.WindowsTerminal",
-        "Microsoft.WSL",
+        "MiKTeX.MiKTeX",
         "Mozilla.Firefox",
-        "Notepad++.Notepad++",
         "OBSProject.OBSStudio",
         "Ollama.Ollama",
         "OpenWhisperSystems.Signal",
@@ -46,8 +50,6 @@
         "Postman.Postman",
         "qBittorrent.qBittorrent",
         "Rustlang.Rustup",
-        "Schniz.fnm",
-        "ScooterSoftware.BeyondCompare.4",
         "SlackTechnologies.Slack",
         "Spotify.Spotify",
         "Stretchly.Stretchly",
@@ -62,7 +64,8 @@
     },
     {
       "source": "msstore",
-      "items": ["9PFHDD62MXS1", "9NP83LWLPZ9K", "9P8JQ0JJSTLL"]
+      "items": [],
+      "optional": ["9PFHDD62MXS1", "9NP83LWLPZ9K", "9P8JQ0JJSTLL"]
     },
     {
       "source": "adminCommandLine",
