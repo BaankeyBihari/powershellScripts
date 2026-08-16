@@ -30,7 +30,6 @@
       "optional": [
         "ALCPU.CoreTemp",
         "calibre.calibre",
-        "Docker.DockerDesktop",
         "GIMP.GIMP",
         "GoLang.Go",
         "Google.Chrome",
@@ -51,6 +50,7 @@
         "qBittorrent.qBittorrent",
         "Rustlang.Rustup",
         "Spotify.Spotify",
+        "SUSE.RancherDesktop",
         "Stretchly.Stretchly",
         "TeXstudio.TeXstudio",
         "Tonec.InternetDownloadManager",
