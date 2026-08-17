@@ -24,6 +24,7 @@
         "Microsoft.VisualStudioCode",
         "Microsoft.WindowsTerminal",
         "Microsoft.WSL",
+        "OpenJS.NodeJS",
         "Oven-sh.Bun",
         "Schniz.fnm",
         "ScooterSoftware.BeyondCompare.4"
