@@ -24,6 +24,22 @@ A one-shot Windows machine-bootstrap system: `install.ps1` reads `default.json` 
 
 **`helpers/*.ps1`**: one PowerShell function per file, filename matches the function name (`Verb-Noun.ps1` → `function Verb-Noun { ... }`). These are never referenced directly by `install.ps1`'s package-install logic — the *only* thing that wires a helper into the user's profile is adding a matching `type: "link"` entry to `default.json`'s `profile` array pointing at its raw GitHub URL. Adding a new helper is therefore a two-file change: create `helpers/<Verb-Noun>.ps1`, then register it in `default.json`.
 
+Every helper function must start its body with a comment-based help block (`<# .SYNOPSIS ... .EXAMPLE ... #>`), e.g.:
+
+```powershell
+function Verb-Noun {
+    <#
+    .SYNOPSIS
+    One-line description of what this does.
+    .EXAMPLE
+    Verb-Noun
+    #>
+    ...
+}
+```
+
+`helpers/Show-DukeCommands.ps1` reads this via `Get-Help` to list every spliced-in function with its description and usage — a helper without a `.SYNOPSIS` shows as "(no description available)". When adding a new helper or editing an existing one, add or update its `.SYNOPSIS` (and `.EXAMPLE` if usage isn't obvious from the syntax alone) so it stays accurate.
+
 Note the bootstrapping dependency: `profile` link entries point at `raw.githubusercontent.com/.../main/...`, so a helper isn't actually pullable by end users until its commit is merged to `main`.
 
 ## Continuity across agent sessions
