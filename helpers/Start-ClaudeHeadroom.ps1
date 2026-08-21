@@ -1,4 +1,10 @@
 function Start-ClaudeHeadroom {
+    <#
+    .SYNOPSIS
+    Launches claude with ANTHROPIC_BASE_URL pointed at a locally running Headroom proxy.
+    .EXAMPLE
+    Start-ClaudeHeadroom
+    #>
     $headroomUrl = "http://127.0.0.1:8787"
 
     try {
