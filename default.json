@@ -111,6 +111,11 @@
       "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Show-DukeCommands.ps1"
     },
     {
+      "sectionName": "Switch-Kubernetes",
+      "type": "link",
+      "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Switch-Kubernetes.ps1"
+    },
+    {
       "sectionName": "Drama",
       "type": "content",
       "value": "# No Content"
