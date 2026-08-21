@@ -116,6 +116,11 @@
       "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Switch-Kubernetes.ps1"
     },
     {
+      "sectionName": "Invoke-TeeCommand",
+      "type": "link",
+      "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Invoke-TeeCommand.ps1"
+    },
+    {
       "sectionName": "Drama",
       "type": "content",
       "value": "# No Content"
