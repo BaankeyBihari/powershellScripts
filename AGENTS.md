@@ -4,13 +4,15 @@ Guidance for AI coding agents working in this repository.
 
 ## What this repo is
 
-A one-shot Windows machine-bootstrap system: `install.ps1` reads `default.json` and (1) installs a list of winget/msstore/scoop packages, runs post-install commands, and (2) splices a set of standalone PowerShell functions (`helpers/*.ps1`) into the user's PowerShell profile. There is no build step, linter, or test suite — validate changes by reading/running the scripts directly with `pwsh`.
+A one-shot Windows machine-bootstrap system: `install.ps1` reads `default.json` and (1) installs a list of winget/msstore/scoop packages, runs post-install commands, and (2) splices a set of standalone PowerShell functions (`helpers/*.ps1`) into the user's PowerShell profile. There is no build step — validate changes by reading/running the scripts directly with `pwsh`, and by lint/tests (see below).
 
 ## Commands
 
 - Run the installer end-to-end: `pwsh -File install.ps1` (downloads `default.json`/`install.ps1` from GitHub by default; pass `-resourceUri`/`-installUri` to point at local copies instead, e.g. `pwsh -File install.ps1 -resourceUri ./default.json -installUri ./install.ps1`).
 - Manually exercise a single helper without touching your profile: `. .\helpers\Start-ADBDaemon.ps1; Start-ADBDaemon` (dot-source the file, then call the function).
-- There's no automated test/build/lint command — sanity-check edits by dot-sourcing the changed file and invoking the function, and by confirming `default.json` still parses (`Get-Content default.json -Raw | ConvertFrom-Json`).
+- Lint (`install.ps1` and `helpers/*.ps1` only, rules tuned via `PSScriptAnalyzerSettings.psd1`): `Install-Module PSScriptAnalyzer -Scope CurrentUser -Force` then `Invoke-ScriptAnalyzer -Path install.ps1,helpers -Recurse -Settings ./PSScriptAnalyzerSettings.psd1`.
+- Tests (Pester specs in `tests/` cover `default.json` shape, that every `helpers/*.ps1` defines a function matching its filename, and that both `install.ps1` and each helper parse without syntax errors): `Install-Module Pester -MinimumVersion 5.5.0 -Scope CurrentUser -Force` then `Invoke-Pester -Path ./tests`.
+- CI (`.github/workflows/ci.yml`) runs both of the above on push/PR to `main`. It does not run `install.ps1` itself — that does real package installs and profile writes, which isn't safe in CI.
 
 ## Architecture
 
