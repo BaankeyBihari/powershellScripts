@@ -23,3 +23,12 @@ A one-shot Windows machine-bootstrap system: `install.ps1` reads `default.json` 
 **`helpers/*.ps1`**: one PowerShell function per file, filename matches the function name (`Verb-Noun.ps1` → `function Verb-Noun { ... }`). These are never referenced directly by `install.ps1`'s package-install logic — the *only* thing that wires a helper into the user's profile is adding a matching `type: "link"` entry to `default.json`'s `profile` array pointing at its raw GitHub URL. Adding a new helper is therefore a two-file change: create `helpers/<Verb-Noun>.ps1`, then register it in `default.json`.
 
 Note the bootstrapping dependency: `profile` link entries point at `raw.githubusercontent.com/.../main/...`, so a helper isn't actually pullable by end users until its commit is merged to `main`.
+
+## Continuity across agent sessions
+
+For non-trivial or likely-multi-session work (skip this for one-shot edits like a single typo fix or small helper tweak), use GitHub issues as the shared resumption point so another agent/session — possibly a different tool entirely — can pick up where you left off.
+
+- **Session log issue**: a single persistent issue titled `Agent Session Log` is the index and discussion thread for ongoing AI-assisted work in this repo. Before starting non-trivial work, check whether it exists (`gh issue list --search "Agent Session Log" --state open`). If it doesn't, draft one and get the user's go-ahead before creating it — issue creation is a shared, visible action, not something to do silently.
+- **Scoped work issues**: once a task's plan/scope is finalized, open a new issue for that specific piece of work, with `Parent: #<session-log-issue-number>` in the body. Keep discussion/decisions on the session log issue; use the scoped issue to record that task's plan, progress, and next steps, so a future session has enough context to resume without re-deriving it.
+- Check `gh issue list` for open scoped issues linked to the session log before starting from scratch — you may be resuming existing work rather than starting new.
+- Always confirm with the user before `gh issue create` or `gh issue close` — draft the content, get a go-ahead, then run it.
