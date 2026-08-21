@@ -44,7 +44,7 @@ function Test-PackageInstalled($source, $item) {
                 return $false
             }
             $result = scoop list $item 6>$null
-            return [bool]($result | Select-String -Pattern "^$([regex]::Escape($item))\s")
+            return [bool]($result | Where-Object { $_.Name -eq $item })
         }
         default {
             return $false
@@ -130,7 +130,11 @@ foreach ($installer in $config.install) {
             Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
             Invoke-RestMethod get.scoop.sh | Invoke-Expression
         }
+        $existingBuckets = @(scoop bucket list | Select-Object -ExpandProperty Name)
         foreach ($bucket in $installer.buckets) {
+            if ($existingBuckets -contains $bucket.name) {
+                continue
+            }
             if (Get-Member -inputobject $bucket -name "link" -Membertype Properties) {
                 scoop bucket add $bucket.name $bucket.link
             }
