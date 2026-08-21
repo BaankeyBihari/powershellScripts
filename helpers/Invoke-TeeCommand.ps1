@@ -22,7 +22,9 @@ function Invoke-TeeCommand {
     }
 
     if (-not $logPath) {
-        $logPath = [System.IO.Path]::GetTempFileName()
+        $prefix = if ($rest.Count -ge 1 -and $rest[0] -is [scriptblock]) { 'scriptblock' } else { [string]$rest[0] }
+        $safePrefix = $prefix -replace '[^\w.-]', '_'
+        $logPath = Join-Path ([System.IO.Path]::GetTempPath()) "tee-$safePrefix-$([System.IO.Path]::GetRandomFileName()).log"
         Write-Warning "No -LogPath given; writing output to $logPath"
     }
 
