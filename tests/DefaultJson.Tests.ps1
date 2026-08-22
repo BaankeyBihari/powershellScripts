@@ -25,6 +25,19 @@ Describe 'default.json' {
                 $entry.PSObject.Properties.Name | Should -Contain 'items' -Because "source '$($entry.source)' should declare an items array (can be empty)"
             }
         }
+
+        # @spec QUALITY-012
+        It 'give winget/msstore items/optional entries an {id, name} shape with non-empty fields' {
+            foreach ($entry in $config.install | Where-Object { $_.source -in @('winget', 'msstore') }) {
+                foreach ($packageEntry in @($entry.items) + @($entry.optional)) {
+                    if ($null -eq $packageEntry) { continue }
+                    $packageEntry.PSObject.Properties.Name | Should -Contain 'id' -Because "source '$($entry.source)' package entries should be {id, name} objects"
+                    $packageEntry.PSObject.Properties.Name | Should -Contain 'name' -Because "source '$($entry.source)' package entries should be {id, name} objects"
+                    $packageEntry.id | Should -Not -BeNullOrEmpty
+                    $packageEntry.name | Should -Not -BeNullOrEmpty
+                }
+            }
+        }
     }
 
     Context 'profile entries' {

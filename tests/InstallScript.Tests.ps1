@@ -6,11 +6,13 @@ BeforeAll {
     # side effects at the top level) so its embedded functions are extracted via AST
     # and defined in isolation instead.
     $installAst = [System.Management.Automation.Language.Parser]::ParseFile($installScriptPath, [ref]$null, [ref]$null)
-    $testInstallExitCodeAst = $installAst.Find({
-            param($node)
-            $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq 'Test-InstallExitCode'
-        }, $true)
-    . ([scriptblock]::Create($testInstallExitCodeAst.Extent.Text))
+    foreach ($functionName in @('Test-InstallExitCode', 'Resolve-PlanItem', 'Format-FailureLabel')) {
+        $ast = $installAst.Find({
+                param($node)
+                $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $functionName
+            }, $true)
+        . ([scriptblock]::Create($ast.Extent.Text))
+    }
 }
 
 Describe 'install.ps1' {
@@ -36,5 +38,34 @@ Describe 'Test-InstallExitCode' {
         $result | Should -Be $false
         $warnings | Should -Match 'broken-pkg'
         $warnings | Should -Match 'scoop'
+    }
+}
+
+Describe 'Resolve-PlanItem' {
+    # @spec BOOT-015
+    It 'extracts id as Item and name as Name from an {id, name} object entry' {
+        $entry = [PSCustomObject]@{ id = 'ALCPU.CoreTemp'; name = 'Core Temp' }
+        $result = Resolve-PlanItem -Entry $entry
+        $result.Item | Should -Be 'ALCPU.CoreTemp'
+        $result.Name | Should -Be 'Core Temp'
+    }
+
+    # @spec BOOT-016
+    It 'falls back to the raw string for both Item and Name when the entry is a flat string (scoop)' {
+        $result = Resolve-PlanItem -Entry 'sudo'
+        $result.Item | Should -Be 'sudo'
+        $result.Name | Should -Be 'sudo'
+    }
+}
+
+Describe 'Format-FailureLabel' {
+    # @spec BOOT-017
+    It 'formats as "Name (Item)" when Name differs from Item' {
+        Format-FailureLabel -Item 'ALCPU.CoreTemp' -Name 'Core Temp' | Should -Be 'Core Temp (ALCPU.CoreTemp)'
+    }
+
+    # @spec BOOT-017
+    It 'formats as just Item when Name equals Item (scoop fallback case)' {
+        Format-FailureLabel -Item 'sudo' -Name 'sudo' | Should -Be 'sudo'
     }
 }

@@ -47,6 +47,33 @@ function Test-InstallExitCode {
     return $true
 }
 
+function Resolve-PlanItem {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        $Entry
+    )
+    if ($Entry -is [string]) {
+        return [PSCustomObject]@{ Item = $Entry; Name = $Entry }
+    }
+    return [PSCustomObject]@{ Item = $Entry.id; Name = $Entry.name }
+}
+
+function Format-FailureLabel {
+    [CmdletBinding()]
+    [OutputType([string])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Item,
+        [Parameter(Mandatory = $true)]
+        [string]$Name
+    )
+    if ($Name -and $Name -ne $Item) {
+        return "$Name ($Item)"
+    }
+    return $Item
+}
+
 function Test-PackageInstalled($source, $item) {
     switch ($source) {
         "winget" {
@@ -70,6 +97,7 @@ function Test-PackageInstalled($source, $item) {
     }
 }
 
+# @spec BOOT-015, BOOT-016, BOOT-017
 # Build a plan across winget/msstore/scoop: what's already there vs what's missing,
 # split into required (always installed) and optional (gated behind a prompt)
 $plan = @()
@@ -77,11 +105,13 @@ foreach ($installer in $config.install) {
     if ($installer.source -notin @("winget", "msstore", "scoop")) {
         continue
     }
-    foreach ($item in $installer.items) {
-        $plan += [PSCustomObject]@{ Source = $installer.source; Item = $item; Required = $true }
+    foreach ($rawItem in $installer.items) {
+        $resolved = Resolve-PlanItem -Entry $rawItem
+        $plan += [PSCustomObject]@{ Source = $installer.source; Item = $resolved.Item; Name = $resolved.Name; Required = $true }
     }
-    foreach ($item in $installer.optional) {
-        $plan += [PSCustomObject]@{ Source = $installer.source; Item = $item; Required = $false }
+    foreach ($rawItem in $installer.optional) {
+        $resolved = Resolve-PlanItem -Entry $rawItem
+        $plan += [PSCustomObject]@{ Source = $installer.source; Item = $resolved.Item; Name = $resolved.Name; Required = $false }
     }
 }
 
@@ -98,9 +128,9 @@ Write-Output ""
 Write-Output "=== Detected ==="
 Write-Output "Already installed: $($alreadyInstalled.Count)"
 Write-Output "Needs installation (required): $($missingRequired.Count)"
-$missingRequired | ForEach-Object { Write-Output "  - $($_.Item) [$($_.Source)]" }
+$missingRequired | ForEach-Object { Write-Output "  - $($_.Name) [$($_.Source)]" }
 Write-Output "Needs installation (optional): $($missingOptional.Count)"
-$missingOptional | ForEach-Object { Write-Output "  - $($_.Item) [$($_.Source)]" }
+$missingOptional | ForEach-Object { Write-Output "  - $($_.Name) [$($_.Source)]" }
 Write-Output ""
 
 $toInstall = @() + $missingRequired
@@ -119,7 +149,7 @@ $i = 0
 $failed = @()
 foreach ($entry in $toInstall) {
     $i++
-    Write-Output "[$i/$total] Installing $($entry.Item) via $($entry.Source)..."
+    Write-Output "[$i/$total] Installing $($entry.Name) via $($entry.Source)..."
     try {
         switch ($entry.Source) {
             "winget" {
@@ -137,12 +167,14 @@ foreach ($entry in $toInstall) {
                 scoop install $entry.Item
             }
         }
-        if (-not (Test-InstallExitCode -ExitCode $LASTEXITCODE -Source $entry.Source -Item $entry.Item)) {
+        $failureLabel = Format-FailureLabel -Item $entry.Item -Name $entry.Name
+        if (-not (Test-InstallExitCode -ExitCode $LASTEXITCODE -Source $entry.Source -Item $failureLabel)) {
             $failed += $entry
         }
     }
     catch {
-        Write-Warning "Failed to install '$($entry.Item)' via $($entry.Source): $($_.Exception.Message)"
+        $failureLabel = Format-FailureLabel -Item $entry.Item -Name $entry.Name
+        Write-Warning "Failed to install '$failureLabel' via $($entry.Source): $($_.Exception.Message)"
         $failed += $entry
     }
 }
@@ -150,7 +182,7 @@ if ($total -gt 0) {
     Write-Output "Done: $($total - $failed.Count)/$total installed."
 }
 if ($failed.Count -gt 0) {
-    Write-Warning "Failed to install $($failed.Count) package(s): $(($failed | ForEach-Object { "$($_.Item) [$($_.Source)]" }) -join ', ')"
+    Write-Warning "Failed to install $($failed.Count) package(s): $(($failed | ForEach-Object { "$(Format-FailureLabel -Item $_.Item -Name $_.Name) [$($_.Source)]" }) -join ', ')"
 }
 
 # Scoop buckets are cheap/idempotent, so these are added regardless of the required/optional choice

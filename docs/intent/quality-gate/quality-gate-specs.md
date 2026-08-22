@@ -11,3 +11,4 @@
 - [x] **QUALITY-009**: The CI pipeline shall not execute `install.ps1` itself.
 - [x] **QUALITY-010**: The test suite shall verify that every file in `helpers/` has a corresponding `profile[]` registration in `default.json`.
 - [x] **QUALITY-011**: The test suite shall verify every `helpers/*.ps1` file has a `.SYNOPSIS` comment-based help block, using the same "synopsis equals bare function name" fallback-detection heuristic `Show-DukeCommands` uses at runtime.
+- [x] **QUALITY-012**: The test suite shall verify every `winget`/`msstore` install entry's `items` and `optional` arrays contain only `{id, name}` objects with non-empty `id` and `name` values.
