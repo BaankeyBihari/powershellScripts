@@ -16,7 +16,7 @@ function Invoke-TeeCommand {
     # remaining arguments instead collapses them to plain positional values on splat,
     # breaking forwarded flags like `docker ps -a`.
     if ($args.Count -eq 0) {
-        Write-Error "Invoke-TeeCommand requires a command to run, e.g. 'Invoke-TeeCommand docker ps' or 'Invoke-TeeCommand { docker ps -a }'."
+        Write-Error "Invoke-TeeCommand requires a command to run, e.g. 'Invoke-TeeCommand docker ps' or 'Invoke-TeeCommand { docker ps -a }'." -ErrorAction Continue
         return
     }
 
@@ -28,7 +28,7 @@ function Invoke-TeeCommand {
     }
 
     if ($rest.Count -eq 0) {
-        Write-Error "Invoke-TeeCommand requires a command to run after -LogPath, e.g. 'Invoke-TeeCommand -LogPath C:\temp\out.log docker ps'."
+        Write-Error "Invoke-TeeCommand requires a command to run after -LogPath, e.g. 'Invoke-TeeCommand -LogPath C:\temp\out.log docker ps'." -ErrorAction Continue
         return
     }
 
