@@ -51,6 +51,14 @@ Describe 'Start-ADBDaemon' {
 }
 
 Describe 'Switch-Kubernetes' {
+    BeforeAll {
+        # rdctl/docker are external CLIs (Rancher Desktop, Docker) that may not be
+        # installed on the test machine/CI runner; stub them so Pester's Mock has a
+        # real command to resolve and shadow.
+        function rdctl {}
+        function docker {}
+    }
+
     Context 'when Docker becomes available immediately' {
         BeforeEach {
             Mock rdctl {
