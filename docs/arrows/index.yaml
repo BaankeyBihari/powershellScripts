@@ -6,7 +6,7 @@ taxonomy:
     - bootstrap
   profile-helpers:
     - show-duke-commands
-    - get-winget-upgrade
+    - update-software
     - invoke-tee-command
     - reset-beyond-compare
     - dev-workflow-toggles
@@ -37,15 +37,15 @@ arrows:
     next: "Both open questions (shared regex, silent-skip diagnostic) remain deferred, no gap spec covers them."
     drift: null
 
-  get-winget-upgrade:
+  update-software:
     status: AUDITED
     parent: null
     sampled: 2026-08-22
     audited: 2026-08-22
-    audited_sha: 5e75d0a43ade801b045aba49b6c1263cd36fdb41
+    audited_sha: null
     blocks: []
     blockedBy: []
-    detail: get-winget-upgrade.md
+    detail: update-software.md
     next: null
     drift: null
 

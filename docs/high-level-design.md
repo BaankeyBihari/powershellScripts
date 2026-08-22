@@ -51,7 +51,7 @@ flowchart TD
 **Segments** (see `docs/intent/` for full LLDs, `docs/arrows/` for status):
 1. **Bootstrap & Self-Update** — the orchestrator: manifest parsing, package dispatch, profile splicing, and the self-update re-entry point.
 2. **Command Discovery** — `Show-DukeCommands`, the only helper with a structural dependency on the Bootstrap segment's section-marker convention.
-3. **Windows Package Maintenance** — `Get-WingetUpgrade`, a thin winget-upgrade wrapper.
+3. **Software Update** — `Update-Software`, a full-stack update wrapper across winget, scoop (apps and buckets), and uv-managed tools.
 4. **Session Logging** — `Invoke-TeeCommand`, a general-purpose console+file tee utility.
 5. **BeyondCompare Trial Reset** — `Reset-BeyondCompare`, a standalone registry tweak.
 6. **Dev Workflow Toggles** — `Start-ADBDaemon`, `Switch-Kubernetes`, `Start-ClaudeHeadroom`: three independent background-dev-service toggles grouped by shared shape, not shared code.
@@ -79,5 +79,5 @@ flowchart TD
 
 - `AGENTS.md` — repo-level agent guidance and architecture description (source of much of this HLD's Approach/Non-Goals framing).
 - `README.md`, `LICENSE` — project scaffolding, not modeled as arrow segments.
-- Per-segment LLDs: `docs/intent/bootstrap/`, `docs/intent/show-duke-commands/`, `docs/intent/get-winget-upgrade/`, `docs/intent/invoke-tee-command/`, `docs/intent/reset-beyond-compare/`, `docs/intent/dev-workflow-toggles/`, `docs/intent/quality-gate/`.
+- Per-segment LLDs: `docs/intent/bootstrap/`, `docs/intent/show-duke-commands/`, `docs/intent/update-software/`, `docs/intent/invoke-tee-command/`, `docs/intent/reset-beyond-compare/`, `docs/intent/dev-workflow-toggles/`, `docs/intent/quality-gate/`.
 - Arrow overlay: `docs/arrows/index.yaml`.

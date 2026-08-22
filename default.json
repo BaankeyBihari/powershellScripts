@@ -100,9 +100,9 @@
   ],
   "profile": [
     {
-      "sectionName": "Get-WingetUpgrade",
+      "sectionName": "Update-Software",
       "type": "link",
-      "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Get-WingetUpgrade.ps1"
+      "value": "https://raw.githubusercontent.com/BaankeyBihari/powershellScripts/main/helpers/Update-Software.ps1"
     },
     {
       "sectionName": "Get-ProfileUpdate",
