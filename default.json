@@ -26,6 +26,7 @@
         { "id": "Microsoft.WSL", "name": "Windows Subsystem for Linux" },
         { "id": "OpenJS.NodeJS", "name": "Node.js" },
         { "id": "Oven-sh.Bun", "name": "Bun" },
+        { "id": "rtk-ai.rtk", "name": "RTK (Rust Token Killer)" },
         { "id": "Schniz.fnm", "name": "Fast Node Manager" },
         { "id": "ScooterSoftware.BeyondCompare.4", "name": "Beyond Compare 4" },
         { "id": "Starship.Starship", "name": "Starship" }
