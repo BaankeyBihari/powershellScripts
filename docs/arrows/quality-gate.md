@@ -4,7 +4,7 @@ Lint (PSScriptAnalyzer) and test (Pester) verification of the repo's own source,
 
 ## Status
 
-**MAPPED** — sampled 2026-08-22, gap specs QUALITY-010/QUALITY-011 closed with tests 2026-08-22 (git SHA `efd29bf`). All 11 specs now have direct test coverage — this segment is close to AUDITED, held back only by not having run a full formal arrow-maintenance audit pass.
+**AUDITED** — sampled 2026-08-22, gap specs QUALITY-010/QUALITY-011 closed with tests 2026-08-22, audited 2026-08-22. All 11 specs have direct test coverage; QUALITY-001 through QUALITY-007's `It` blocks (pre-dating the `@spec` annotation convention) are now tagged (fixed 2026-08-22, `Invoke-Pester` still green: 54/54).
 
 ## References
 

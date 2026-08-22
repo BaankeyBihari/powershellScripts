@@ -4,7 +4,7 @@ Runs an arbitrary command (bare words or a script block) and tees its combined s
 
 ## Status
 
-**MAPPED** — sampled 2026-08-22, gap spec TEE-005 closed with tests 2026-08-22 (git SHA `efd29bf`). The 4 pre-existing `[x]` specs (TEE-001 to TEE-004) still lack tests — deliberately out of scope for this pass, except incidental coverage from the new happy-path regression test.
+**AUDITED** — sampled 2026-08-22, gap spec TEE-005 closed with tests 2026-08-22, audited 2026-08-22. The 4 pre-existing `[x]` specs (TEE-001 to TEE-004) still lack dedicated tests — deliberately out of scope for this pass, except incidental coverage from the happy-path regression test, now tagged `@spec TEE-002, TEE-004` (fixed 2026-08-22).
 
 ## References
 

@@ -14,87 +14,87 @@ taxonomy:
 
 arrows:
   bootstrap:
-    status: MAPPED
+    status: AUDITED
     parent: null
     sampled: 2026-08-22
-    audited: null
-    audited_sha: null
+    audited: 2026-08-22
+    audited_sha: 5e75d0a43ade801b045aba49b6c1263cd36fdb41
     blocks: []
     blockedBy: []
     detail: bootstrap.md
-    next: "Gap specs BOOT-013/BOOT-014 closed with passing tests (2026-08-22). 11 pre-existing specs still lack tests (deliberate, deferred scope). Resolve README/AGENTS.md inconsistency and encoding question if/when prioritized; then audit."
+    next: "11 pre-existing specs still lack tests (deliberate, deferred scope). Resolve README/AGENTS.md inconsistency and encoding question if/when prioritized."
     drift: null
 
   show-duke-commands:
-    status: MAPPED
+    status: AUDITED
     parent: null
     sampled: 2026-08-22
-    audited: null
-    audited_sha: null
+    audited: 2026-08-22
+    audited_sha: 5e75d0a43ade801b045aba49b6c1263cd36fdb41
     blocks: []
     blockedBy: [bootstrap]
     detail: show-duke-commands.md
-    next: "Decisions confirmed (2026-08-22); both open questions (shared regex, silent-skip diagnostic) remain deferred, no gap spec covers them. Ready for a full arrow-maintenance audit pass."
+    next: "Both open questions (shared regex, silent-skip diagnostic) remain deferred, no gap spec covers them."
     drift: null
 
   get-winget-upgrade:
-    status: MAPPED
+    status: AUDITED
     parent: null
     sampled: 2026-08-22
-    audited: null
-    audited_sha: null
+    audited: 2026-08-22
+    audited_sha: 5e75d0a43ade801b045aba49b6c1263cd36fdb41
     blocks: []
     blockedBy: []
     detail: get-winget-upgrade.md
-    next: "Decisions confirmed (2026-08-22); package-filter question resolved via HLD Tenet #3 (stays a bare passthrough). Ready for a full arrow-maintenance audit pass."
+    next: null
     drift: null
 
   invoke-tee-command:
-    status: MAPPED
+    status: AUDITED
     parent: null
     sampled: 2026-08-22
-    audited: null
+    audited: 2026-08-22
     audited_sha: null
     blocks: []
     blockedBy: []
     detail: invoke-tee-command.md
-    next: "TEE-005 closed with tests (2026-08-22). TEE-001 to TEE-004 still untested (deferred); then audit."
+    next: "TEE-001 to TEE-004 still untested (deferred)."
     drift: null
 
   reset-beyond-compare:
-    status: MAPPED
+    status: AUDITED
     parent: null
     sampled: 2026-08-22
-    audited: null
+    audited: 2026-08-22
     audited_sha: null
     blocks: []
     blockedBy: []
     detail: reset-beyond-compare.md
-    next: "BCOMPARE-004 closed with tests (2026-08-22). All 4 specs tested; ready for a full arrow-maintenance audit pass."
+    next: null
     drift: null
 
   dev-workflow-toggles:
-    status: MAPPED
+    status: AUDITED
     parent: null
     sampled: 2026-08-22
-    audited: null
-    audited_sha: null
+    audited: 2026-08-22
+    audited_sha: 5e75d0a43ade801b045aba49b6c1263cd36fdb41
     blocks: []
     blockedBy: []
     detail: dev-workflow-toggles.md
-    next: "TOGGLE-K8S-004/TOGGLE-ADB-002 closed with tests, headroom install path resolved via default.json (all 2026-08-22). TOGGLE-ADB-001/TOGGLE-CLAUDE-* still untested (deferred); then audit."
+    next: "TOGGLE-ADB-001/TOGGLE-CLAUDE-* still untested (deferred)."
     drift: null
 
   quality-gate:
-    status: MAPPED
+    status: AUDITED
     parent: null
     sampled: 2026-08-22
-    audited: null
+    audited: 2026-08-22
     audited_sha: null
     blocks: []
     blockedBy: []
     detail: quality-gate.md
-    next: "All 11 specs now implemented and tested (QUALITY-010/011 closed 2026-08-22). Ready for a full arrow-maintenance audit pass."
+    next: null
     drift: null
 
 unmapped:

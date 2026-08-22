@@ -4,7 +4,7 @@ Lists every function this repo has spliced into the current user's PowerShell pr
 
 ## Status
 
-**MAPPED** — sampled 2026-08-22, decisions confirmed 2026-08-22 (git SHA `efd29bf`). Zero-gap segment: no code changed, no tests added; both open questions remain deferred (no tenet or gap spec resolves them).
+**AUDITED** — sampled 2026-08-22, decisions confirmed 2026-08-22, audited 2026-08-22 (git SHA `5e75d0a`). Zero-gap segment: no code changed, no tests added; both open questions remain deferred (no tenet or gap spec resolves them); reference coherence and orphan checks clean.
 
 ## References
 

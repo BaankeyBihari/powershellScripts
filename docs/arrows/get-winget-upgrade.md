@@ -4,7 +4,7 @@ Lists (and, via winget's own interactive UI, offers to upgrade) all winget packa
 
 ## Status
 
-**MAPPED** — sampled 2026-08-22, decisions confirmed 2026-08-22 (git SHA `efd29bf`). Zero-gap segment: no code changed, no tests added; its one open question was resolved via the HLD's Tenet #3 rather than new code.
+**AUDITED** — sampled 2026-08-22, decisions confirmed 2026-08-22, audited 2026-08-22 (git SHA `5e75d0a`). Zero-gap segment: no code changed, no tests added; its one open question was resolved via the HLD's Tenet #3 rather than new code; reference coherence and orphan checks clean.
 
 ## References
 

@@ -4,7 +4,7 @@ Three independent profile helpers that each start, stop, or launch-with-precondi
 
 ## Status
 
-**MAPPED** — sampled 2026-08-22, gap specs TOGGLE-ADB-002/TOGGLE-K8S-004 closed with tests 2026-08-22 (git SHA `efd29bf`). The 7 pre-existing `[x]` specs (ADB-001, K8S-001/002/003, CLAUDE-001/002/003) still lack tests — deliberately out of scope for this pass.
+**AUDITED** — sampled 2026-08-22, gap specs TOGGLE-ADB-002/TOGGLE-K8S-004 closed with tests 2026-08-22, audited 2026-08-22 (git SHA `5e75d0a`). The 4 pre-existing `[x]` specs still fully untested are ADB-001 and CLAUDE-001/002/003 — deliberately out of scope for this pass. K8S-001/002/003 turned out to already have dedicated `@spec`-annotated tests (corrected during audit; the prior count undercounted them).
 
 ## References
 
@@ -39,10 +39,10 @@ Three independent profile helpers that each start, stop, or launch-with-precondi
 | Category | Spec IDs | Implemented | Tested | Gaps |
 |----------|----------|-------------|--------|------|
 | ADB | TOGGLE-ADB-001, TOGGLE-ADB-002 | 2 | 1 | 0 |
-| Kubernetes | TOGGLE-K8S-001 to TOGGLE-K8S-004 | 4 | 2 | 0 |
+| Kubernetes | TOGGLE-K8S-001 to TOGGLE-K8S-004 | 4 | 4 | 0 |
 | Claude+Headroom | TOGGLE-CLAUDE-001 to TOGGLE-CLAUDE-003 | 3 | 0 | 0 |
 
-**Summary:** 9 of 9 specs implemented; 3 of 9 have dedicated tests (the two gap specs closed this pass, plus `TOGGLE-K8S-001`/`002` incidentally covered by the same test that exercises `TOGGLE-K8S-004`). `TOGGLE-CLAUDE-*` remains fully untested — deliberately out of scope for this pass.
+**Summary:** 9 of 9 specs implemented; 5 of 9 have dedicated tests (the two gap specs closed this pass, plus all four Kubernetes specs — `TOGGLE-K8S-001`/`002` via one `@spec`-annotated test, `003` and `004` each via their own). `TOGGLE-ADB-001` and `TOGGLE-CLAUDE-*` remain fully untested — deliberately out of scope for this pass.
 
 ## Key Findings
 

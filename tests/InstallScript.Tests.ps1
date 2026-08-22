@@ -14,6 +14,7 @@ BeforeAll {
 }
 
 Describe 'install.ps1' {
+    # @spec QUALITY-007
     It 'has no PowerShell parse errors' {
         $parseErrors = $null
         [System.Management.Automation.Language.Parser]::ParseFile($installScriptPath, [ref]$null, [ref]$parseErrors) | Out-Null

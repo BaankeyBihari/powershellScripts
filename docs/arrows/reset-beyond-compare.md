@@ -4,7 +4,7 @@ Clears the Beyond Compare 4 trial `CacheID` registry value under `HKCU` to reset
 
 ## Status
 
-**MAPPED** — sampled 2026-08-22, gap spec BCOMPARE-004 closed with tests 2026-08-22 (git SHA `efd29bf`). All 4 specs now have direct test coverage.
+**AUDITED** — sampled 2026-08-22, gap spec BCOMPARE-004 closed with tests 2026-08-22, audited 2026-08-22. All 4 specs now have direct assertions: BCOMPARE-001/BCOMPARE-003 (the before/after registry-value prints), found untested during audit, got dedicated tests asserting on `Reset-BeyondCompare`'s pipeline output (fixed 2026-08-22, `Invoke-Pester` green: 8/8 for this segment).
 
 ## References
 
@@ -34,7 +34,7 @@ Clears the Beyond Compare 4 trial `CacheID` registry value under `HKCU` to reset
 
 | Category | Spec IDs | Implemented | Tested | Gaps |
 |----------|----------|-------------|--------|------|
-| Reset behavior | BCOMPARE-001 to BCOMPARE-003 | 3 | 1 (happy-path test covers all three) | 0 |
+| Reset behavior | BCOMPARE-001 to BCOMPARE-003 | 3 | 3 | 0 |
 | Error handling | BCOMPARE-004 | 1 | 1 | 0 |
 
 **Summary:** 4 of 4 specs implemented and tested — smallest segment in the repo, fully covered.

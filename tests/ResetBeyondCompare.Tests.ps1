@@ -50,14 +50,37 @@ Describe 'Reset-BeyondCompare' {
     Context 'when the key and CacheID both exist (happy path)' {
         BeforeEach {
             Mock Test-Path { $true } -ParameterFilter { $Path -eq $keyPath }
-            Mock Get-ItemProperty { [PSCustomObject]@{ PSPath = $keyPath; CacheID = 'some-cached-id' } } -ParameterFilter { $Path -eq $keyPath }
+            # Get-ItemProperty is called twice per Reset-BeyondCompare run (before and
+            # after removal); the call counter lets the mock reflect CacheID's removal
+            # on the second call instead of returning the same object both times.
+            $script:getItemPropertyCallCount = 0
+            Mock Get-ItemProperty {
+                $script:getItemPropertyCallCount++
+                if ($script:getItemPropertyCallCount -eq 1) {
+                    [PSCustomObject]@{ PSPath = $keyPath; CacheID = 'some-cached-id' }
+                } else {
+                    [PSCustomObject]@{ PSPath = $keyPath }
+                }
+            } -ParameterFilter { $Path -eq $keyPath }
             Mock Remove-ItemProperty { } -ParameterFilter { $Path -eq $keyPath -and $Name -eq 'CacheID' }
+        }
+
+        # @spec BCOMPARE-001
+        It 'prints the current registry value before making any change' {
+            $output = Reset-BeyondCompare | Where-Object { $_ -isnot [System.Management.Automation.WarningRecord] }
+            $output[0].CacheID | Should -Be 'some-cached-id'
         }
 
         # @spec BCOMPARE-002
         It 'removes the CacheID value' {
             Reset-BeyondCompare | Out-Null
             Should -Invoke Remove-ItemProperty -Times 1 -ParameterFilter { $Path -eq $keyPath -and $Name -eq 'CacheID' }
+        }
+
+        # @spec BCOMPARE-003
+        It 'prints the resulting registry value after removing CacheID' {
+            $output = Reset-BeyondCompare | Where-Object { $_ -isnot [System.Management.Automation.WarningRecord] }
+            $output[1].PSObject.Properties.Name | Should -Not -Contain 'CacheID'
         }
 
         # @spec BCOMPARE-004

@@ -4,7 +4,7 @@ Installs winget/msstore/scoop packages and post-install command snippets, splice
 
 ## Status
 
-**MAPPED** — sampled 2026-08-22, gap specs BOOT-013/BOOT-014 closed with tests 2026-08-22 (git SHA `efd29bf`). The 12 pre-existing `[x]` specs are reconstructed from source and still lack dedicated tests (deliberately out of scope for this pass — see this segment's `next` note); the 2 gap specs closed in this pass have real, passing tests.
+**AUDITED** — sampled 2026-08-22, gap specs BOOT-013/BOOT-014 closed with tests 2026-08-22, audited 2026-08-22 (git SHA `5e75d0a`). The 12 pre-existing `[x]` specs are reconstructed from source and still lack dedicated tests (deliberately out of scope for this pass — see this segment's `next` note); the 2 gap specs closed in this pass have real, passing tests; reference coherence, coverage, and orphan checks all clean.
 
 ## References
 

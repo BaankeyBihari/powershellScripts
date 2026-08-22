@@ -12,12 +12,14 @@ Describe 'default.json' {
     }
 
     Context 'install entries' {
+        # @spec QUALITY-001
         It 'only use known sources' {
             foreach ($entry in $config.install) {
                 $entry.source | Should -BeIn $knownInstallSources
             }
         }
 
+        # @spec QUALITY-002
         It 'give winget/msstore/scoop entries an items property' {
             foreach ($entry in $config.install | Where-Object { $_.source -in @('winget', 'msstore', 'scoop') }) {
                 $entry.PSObject.Properties.Name | Should -Contain 'items' -Because "source '$($entry.source)' should declare an items array (can be empty)"
@@ -26,6 +28,7 @@ Describe 'default.json' {
     }
 
     Context 'profile entries' {
+        # @spec QUALITY-003
         It 'have a sectionName, a known type, and a value' {
             foreach ($entry in $config.profile) {
                 $entry.sectionName | Should -Not -BeNullOrEmpty
@@ -34,6 +37,7 @@ Describe 'default.json' {
             }
         }
 
+        # @spec QUALITY-004
         It 'point link entries under helpers/ at a file that exists and defines a matching function' {
             $helperLinks = $config.profile | Where-Object { $_.type -eq 'link' -and $_.value -match '/helpers/([^/]+\.ps1)$' }
             foreach ($entry in $helperLinks) {

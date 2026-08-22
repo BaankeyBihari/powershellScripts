@@ -26,6 +26,7 @@ Describe 'Invoke-TeeCommand' {
         ($result -join ' ') | Should -Not -Match 'No -LogPath given'
     }
 
+    # @spec TEE-002, TEE-004
     It 'still runs the wrapped command and writes the log when given a command' {
         $logPath = Join-Path $TestDrive 'happy.log'
         Invoke-TeeCommand -LogPath $logPath Write-Output 'hello-tee' | Out-Null
