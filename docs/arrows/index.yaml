@@ -1,0 +1,102 @@
+schema_version: 2
+last_updated: 2026-08-22
+
+taxonomy:
+  installer:
+    - bootstrap
+  profile-helpers:
+    - show-duke-commands
+    - get-winget-upgrade
+    - invoke-tee-command
+    - reset-beyond-compare
+    - dev-workflow-toggles
+  quality-gate: standalone
+
+arrows:
+  bootstrap:
+    status: MAPPED
+    parent: null
+    sampled: 2026-08-22
+    audited: null
+    audited_sha: null
+    blocks: []
+    blockedBy: []
+    detail: bootstrap.md
+    next: "Confirm [inferred] decisions in the LLD with the user; resolve the README/AGENTS.md entry-point inconsistency; then audit."
+    drift: null
+
+  show-duke-commands:
+    status: MAPPED
+    parent: null
+    sampled: 2026-08-22
+    audited: null
+    audited_sha: null
+    blocks: []
+    blockedBy: [bootstrap]
+    detail: show-duke-commands.md
+    next: "Decide whether the section-marker regex should be shared with bootstrap; then audit."
+    drift: null
+
+  get-winget-upgrade:
+    status: MAPPED
+    parent: null
+    sampled: 2026-08-22
+    audited: null
+    audited_sha: null
+    blocks: []
+    blockedBy: []
+    detail: get-winget-upgrade.md
+    next: "Confirm no further scope is wanted (package-name filter, silent mode); then audit."
+    drift: null
+
+  invoke-tee-command:
+    status: MAPPED
+    parent: null
+    sampled: 2026-08-22
+    audited: null
+    audited_sha: null
+    blocks: []
+    blockedBy: []
+    detail: invoke-tee-command.md
+    next: "Resolve TEE-005 (zero-argument guard); then audit."
+    drift: null
+
+  reset-beyond-compare:
+    status: MAPPED
+    parent: null
+    sampled: 2026-08-22
+    audited: null
+    audited_sha: null
+    blocks: []
+    blockedBy: []
+    detail: reset-beyond-compare.md
+    next: "Resolve BCOMPARE-004 (missing-key guard); then audit."
+    drift: null
+
+  dev-workflow-toggles:
+    status: MAPPED
+    parent: null
+    sampled: 2026-08-22
+    audited: null
+    audited_sha: null
+    blocks: []
+    blockedBy: []
+    detail: dev-workflow-toggles.md
+    next: "Resolve TOGGLE-K8S-004 (polling timeout) and TOGGLE-ADB-002 (job output); confirm headroom's install path; then audit."
+    drift: null
+
+  quality-gate:
+    status: MAPPED
+    parent: null
+    sampled: 2026-08-22
+    audited: null
+    audited_sha: null
+    blocks: []
+    blockedBy: []
+    detail: quality-gate.md
+    next: "Add QUALITY-010/011 coverage (reverse helper registration check, .SYNOPSIS check); then audit."
+    drift: null
+
+unmapped:
+  docs:
+    intent: []
