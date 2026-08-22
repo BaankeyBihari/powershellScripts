@@ -151,6 +151,11 @@
       "sectionName": "starship",
       "type": "content",
       "value": "starship init powershell | Invoke-Expression"
+    },
+    {
+      "sectionName": "eza",
+      "type": "content",
+      "value": "Remove-Item alias:ls -ErrorAction SilentlyContinue\nfunction ls { eza --icons $args }\nfunction ll { eza -l --icons --git --header --group-directories-first $args }\nfunction la { eza -la --icons --git --header --group-directories-first $args }\nfunction lt { eza --tree --icons --level=2 $args }\nfunction tree { eza --tree --icons $args }"
     }
   ]
 }
