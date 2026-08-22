@@ -22,7 +22,7 @@ arrows:
     blocks: []
     blockedBy: []
     detail: bootstrap.md
-    next: "Confirm [inferred] decisions in the LLD with the user; resolve the README/AGENTS.md entry-point inconsistency; then audit."
+    next: "Gap specs BOOT-013/BOOT-014 closed with passing tests (2026-08-22). 11 pre-existing specs still lack tests (deliberate, deferred scope). Resolve README/AGENTS.md inconsistency and encoding question if/when prioritized; then audit."
     drift: null
 
   show-duke-commands:
@@ -34,7 +34,7 @@ arrows:
     blocks: []
     blockedBy: [bootstrap]
     detail: show-duke-commands.md
-    next: "Decide whether the section-marker regex should be shared with bootstrap; then audit."
+    next: "Decisions confirmed (2026-08-22); both open questions (shared regex, silent-skip diagnostic) remain deferred, no gap spec covers them. Ready for a full arrow-maintenance audit pass."
     drift: null
 
   get-winget-upgrade:
@@ -46,7 +46,7 @@ arrows:
     blocks: []
     blockedBy: []
     detail: get-winget-upgrade.md
-    next: "Confirm no further scope is wanted (package-name filter, silent mode); then audit."
+    next: "Decisions confirmed (2026-08-22); package-filter question resolved via HLD Tenet #3 (stays a bare passthrough). Ready for a full arrow-maintenance audit pass."
     drift: null
 
   invoke-tee-command:
@@ -58,7 +58,7 @@ arrows:
     blocks: []
     blockedBy: []
     detail: invoke-tee-command.md
-    next: "Resolve TEE-005 (zero-argument guard); then audit."
+    next: "TEE-005 closed with tests (2026-08-22). TEE-001 to TEE-004 still untested (deferred); then audit."
     drift: null
 
   reset-beyond-compare:
@@ -70,7 +70,7 @@ arrows:
     blocks: []
     blockedBy: []
     detail: reset-beyond-compare.md
-    next: "Resolve BCOMPARE-004 (missing-key guard); then audit."
+    next: "BCOMPARE-004 closed with tests (2026-08-22). All 4 specs tested; ready for a full arrow-maintenance audit pass."
     drift: null
 
   dev-workflow-toggles:
@@ -82,7 +82,7 @@ arrows:
     blocks: []
     blockedBy: []
     detail: dev-workflow-toggles.md
-    next: "Resolve TOGGLE-K8S-004 (polling timeout) and TOGGLE-ADB-002 (job output); confirm headroom's install path; then audit."
+    next: "TOGGLE-K8S-004/TOGGLE-ADB-002 closed with tests, headroom install path resolved via default.json (all 2026-08-22). TOGGLE-ADB-001/TOGGLE-CLAUDE-* still untested (deferred); then audit."
     drift: null
 
   quality-gate:
@@ -94,7 +94,7 @@ arrows:
     blocks: []
     blockedBy: []
     detail: quality-gate.md
-    next: "Add QUALITY-010/011 coverage (reverse helper registration check, .SYNOPSIS check); then audit."
+    next: "All 11 specs now implemented and tested (QUALITY-010/011 closed 2026-08-22). Ready for a full arrow-maintenance audit pass."
     drift: null
 
 unmapped:

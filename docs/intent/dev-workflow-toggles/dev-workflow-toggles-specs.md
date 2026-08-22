@@ -5,14 +5,14 @@ Facets: `TOGGLE-ADB-*` (Android Debug Bridge), `TOGGLE-K8S-*` (Rancher Desktop K
 ## Start-ADBDaemon
 
 - [x] **TOGGLE-ADB-001**: When `Start-ADBDaemon` is invoked, the system shall kill any running `adb` server (`adb kill-server`) then start a new one as a background job (`adb -a -P 5037 nodaemon server`).
-- [ ] **TOGGLE-ADB-002**: If the background ADB job fails, then the system shall surface the job's output/errors to the caller instead of returning silently.
+- [x] **TOGGLE-ADB-002**: If the background ADB job ends (any state other than still-`Running`) within a short grace period after starting, then the system shall surface the job's output/errors to the caller instead of returning silently.
 
 ## Switch-Kubernetes
 
 - [x] **TOGGLE-K8S-001**: When `Switch-Kubernetes` is invoked, the system shall read the current Kubernetes-backend enabled state via `rdctl list-settings`.
 - [x] **TOGGLE-K8S-002**: When `Switch-Kubernetes` is invoked, the system shall toggle the Kubernetes backend via `rdctl set --kubernetes.enabled=<bool>` to the opposite of its current state.
 - [x] **TOGGLE-K8S-003**: While waiting for Docker to become available after the toggle (Rancher Desktop's Kubernetes backend restart), the system shall poll `docker info` every 2 seconds until it exits successfully.
-- [ ] **TOGGLE-K8S-004**: If Docker does not become available within a bounded time after the toggle, then the system shall stop polling and report a timeout rather than looping indefinitely.
+- [x] **TOGGLE-K8S-004**: If Docker does not become available within `-TimeoutSeconds` (default 120) after the toggle, then the system shall stop polling and report a timeout rather than looping indefinitely.
 
 ## Start-ClaudeHeadroom
 

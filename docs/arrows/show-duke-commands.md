@@ -4,7 +4,7 @@ Lists every function this repo has spliced into the current user's PowerShell pr
 
 ## Status
 
-**MAPPED** — sampled 2026-08-22 (git SHA `efd29bf`). Reconstructed from source during initial brownfield mapping; specs and coverage below are not yet audited against a live test run.
+**MAPPED** — sampled 2026-08-22, decisions confirmed 2026-08-22 (git SHA `efd29bf`). Zero-gap segment: no code changed, no tests added; both open questions remain deferred (no tenet or gap spec resolves them).
 
 ## References
 
@@ -32,7 +32,11 @@ Lists every function this repo has spliced into the current user's PowerShell pr
 
 ## Spec Coverage
 
-Not yet written — EARS specs for this segment are generated in the next step of this bootstrap.
+| Category | Spec IDs | Implemented | Tested | Gaps |
+|----------|----------|-------------|--------|------|
+| Discovery behavior | DUKE-001 to DUKE-005 | 5 | 0 | 0 |
+
+**Summary:** 5 of 5 specs implemented; untested (deliberately out of scope for this pass).
 
 ## Key Findings
 

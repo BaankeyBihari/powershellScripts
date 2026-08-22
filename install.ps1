@@ -29,6 +29,24 @@ Invoke-WebRequest -Uri "${resourceUri}" -OutFile $resourcePath
 # Config for Installers
 $config = Get-Content $resourcePath -Raw | ConvertFrom-Json
 
+# @spec BOOT-013
+function Test-InstallExitCode {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [int]$ExitCode,
+        [Parameter(Mandatory = $true)]
+        [string]$Source,
+        [Parameter(Mandatory = $true)]
+        [string]$Item
+    )
+    if ($ExitCode -ne 0) {
+        Write-Warning "Failed to install '$Item' via $Source (exit code $ExitCode)."
+        return $false
+    }
+    return $true
+}
+
 function Test-PackageInstalled($source, $item) {
     switch ($source) {
         "winget" {
@@ -98,28 +116,41 @@ if ($missingOptional.Count -gt 0) {
 
 $total = $toInstall.Count
 $i = 0
+$failed = @()
 foreach ($entry in $toInstall) {
     $i++
     Write-Output "[$i/$total] Installing $($entry.Item) via $($entry.Source)..."
-    switch ($entry.Source) {
-        "winget" {
-            winget install -e --id $entry.Item --accept-source-agreements --accept-package-agreements
-        }
-        "msstore" {
-            winget install -e --source msstore --id $entry.Item --accept-source-agreements --accept-package-agreements
-        }
-        "scoop" {
-            if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
-                Write-Output "Installing scoop"
-                Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-                Invoke-RestMethod get.scoop.sh | Invoke-Expression
+    try {
+        switch ($entry.Source) {
+            "winget" {
+                winget install -e --id $entry.Item --accept-source-agreements --accept-package-agreements
             }
-            scoop install $entry.Item
+            "msstore" {
+                winget install -e --source msstore --id $entry.Item --accept-source-agreements --accept-package-agreements
+            }
+            "scoop" {
+                if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+                    Write-Output "Installing scoop"
+                    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+                    Invoke-RestMethod get.scoop.sh | Invoke-Expression
+                }
+                scoop install $entry.Item
+            }
         }
+        if (-not (Test-InstallExitCode -ExitCode $LASTEXITCODE -Source $entry.Source -Item $entry.Item)) {
+            $failed += $entry
+        }
+    }
+    catch {
+        Write-Warning "Failed to install '$($entry.Item)' via $($entry.Source): $($_.Exception.Message)"
+        $failed += $entry
     }
 }
 if ($total -gt 0) {
-    Write-Output "Done: $i/$total installed."
+    Write-Output "Done: $($total - $failed.Count)/$total installed."
+}
+if ($failed.Count -gt 0) {
+    Write-Warning "Failed to install $($failed.Count) package(s): $(($failed | ForEach-Object { "$($_.Item) [$($_.Source)]" }) -join ', ')"
 }
 
 # Scoop buckets are cheap/idempotent, so these are added regardless of the required/optional choice

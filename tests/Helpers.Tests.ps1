@@ -20,4 +20,13 @@ Describe 'helpers/<_.FileName>' -ForEach $helperCases {
         . $_.Path
         Get-Command $_.FunctionName -CommandType Function -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
     }
+
+    # @spec QUALITY-011
+    It "has a .SYNOPSIS comment-based help block" {
+        . $_.Path
+        $synopsis = (Get-Help $_.FunctionName -ErrorAction SilentlyContinue).Synopsis
+        $synopsis = if ($synopsis) { $synopsis.Trim() } else { '' }
+        $synopsis | Should -Not -BeNullOrEmpty -Because "helpers/$($_.FileName) should start with a <# .SYNOPSIS ... #> comment-based help block (see AGENTS.md)"
+        $synopsis | Should -Not -Be $_.FunctionName -Because "Get-Help falls back to the bare function name when no .SYNOPSIS is present"
+    }
 }

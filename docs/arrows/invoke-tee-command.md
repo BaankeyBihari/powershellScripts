@@ -4,7 +4,7 @@ Runs an arbitrary command (bare words or a script block) and tees its combined s
 
 ## Status
 
-**MAPPED** — sampled 2026-08-22 (git SHA `efd29bf`). Reconstructed from source during initial brownfield mapping; specs and coverage below are not yet audited against a live test run.
+**MAPPED** — sampled 2026-08-22, gap spec TEE-005 closed with tests 2026-08-22 (git SHA `efd29bf`). The 4 pre-existing `[x]` specs (TEE-001 to TEE-004) still lack tests — deliberately out of scope for this pass, except incidental coverage from the new happy-path regression test.
 
 ## References
 
@@ -18,7 +18,7 @@ Runs an arbitrary command (bare words or a script block) and tees its combined s
 - docs/intent/invoke-tee-command/invoke-tee-command-specs.md (TEE-*)
 
 ### Tests
-- (none currently — not exercised by `tests/`)
+- tests/InvokeTeeCommand.Tests.ps1
 
 ### Code
 - helpers/Invoke-TeeCommand.ps1
@@ -32,13 +32,18 @@ Runs an arbitrary command (bare words or a script block) and tees its combined s
 
 ## Spec Coverage
 
-Not yet written — EARS specs for this segment are generated in the next step of this bootstrap.
+| Category | Spec IDs | Implemented | Tested | Gaps |
+|----------|----------|-------------|--------|------|
+| Command invocation | TEE-001 to TEE-004 | 4 | 1 (incidental, via the happy-path regression test) | 0 |
+| Error handling | TEE-005 | 1 | 1 | 0 |
+
+**Summary:** 5 of 5 specs implemented; the one gap spec closed this pass has direct tests, plus one happy-path regression test added alongside it.
 
 ## Key Findings
 
-1. **Deliberate parameter-binding tradeoff** — the file's own inline comment explains that avoiding `[CmdletBinding()]`/`[Parameter()]` is intentional, so `$args` splatting preserves flag/value pairs (e.g. `-a`) instead of collapsing them positionally. This is a documented design decision, not an oversight (`helpers/Invoke-TeeCommand.ps1:12-16`).
+1. **Deliberate parameter-binding tradeoff** — the file's own inline comment explains that avoiding `[CmdletBinding()]`/`[Parameter()]` is intentional, so `$args` splatting preserves flag/value pairs (e.g. `-a`) instead of collapsing them positionally. This is a documented design decision, not an oversight (`helpers/Invoke-TeeCommand.ps1:12-16`). One consequence, confirmed while fixing `TEE-005`: no `[CmdletBinding()]` means no common parameters either, so tests must use stream redirection (`2>&1`/`3>&1`) rather than `-ErrorVariable`/`-WarningVariable` to inspect its output.
 2. **Most recently actively developed helper** — git log shows 3 recent commits iteratively refining the auto-generated log-prefix logic (add → prefix temp logs → derive prefix from actual command word).
-3. **No guard against being called with zero arguments** — if `$args` is empty, downstream indexing (`$rest[0]`) would hit `$null`; not exercised or tested, only observed from reading the code path.
+3. **Zero-argument crash reproduced and fixed** — confirmed by actually running it: calling with no arguments previously produced a confusing "expression after '&' produced an object that was not valid" error, after first printing a misleading "No -LogPath given" warning and creating a stray empty log file. Now guarded with a specific error before any of that setup runs (`TEE-005`).
 
 ## Work Required
 
@@ -46,7 +51,7 @@ Not yet written — EARS specs for this segment are generated in the next step o
 None identified.
 
 ### Should Fix
-1. Add a guard/early-return for the zero-argument call case.
+None outstanding.
 
 ### Nice to Have
-1. None identified.
+1. Backfill tests for `TEE-001` through `TEE-004` if/when full behavioral coverage becomes a priority.

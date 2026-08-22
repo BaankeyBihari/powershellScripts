@@ -46,5 +46,17 @@ Describe 'default.json' {
                 }
             }
         }
+
+        # @spec QUALITY-010
+        It 'registers every helpers/*.ps1 file as a profile link entry' {
+            $helperFileNames = Get-ChildItem -Path (Join-Path $repoRoot 'helpers') -Filter '*.ps1' | Select-Object -ExpandProperty Name
+            $registeredFileNames = $config.profile | Where-Object { $_.type -eq 'link' -and $_.value -match '/helpers/([^/]+\.ps1)$' } | ForEach-Object {
+                $null = $_.value -match '/helpers/([^/]+\.ps1)$'
+                $Matches[1]
+            }
+            foreach ($fileName in $helperFileNames) {
+                $registeredFileNames | Should -Contain $fileName -Because "helpers/$fileName should be registered as a profile link entry in default.json so it actually reaches a user's profile"
+            }
+        }
     }
 }

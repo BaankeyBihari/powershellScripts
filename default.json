@@ -15,6 +15,7 @@
       "items": [
         "7zip.7zip",
         "Anthropic.ClaudeCode",
+        "astral-sh.uv",
         "AutoHotkey.AutoHotkey",
         "Git.Git",
         "GitHub.cli",
@@ -75,7 +76,8 @@
     {
       "source": "commandLine",
       "items": [
-        "# Post-install configuration for the LaTeX toolchain (MiKTeX / LyX).\n$env:Path = [System.Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path', 'User')\n$lyxDir = Get-ChildItem -Path $env:ProgramFiles -Directory -Filter 'LyX*' -ErrorAction SilentlyContinue | Select-Object -First 1\nif ($lyxDir) { $lyxPython = Join-Path $lyxDir.FullName 'python\\python.exe'; $lyxConfigure = Join-Path $lyxDir.FullName 'resources\\configure.py'; if ((Test-Path $lyxPython) -and (Test-Path $lyxConfigure)) { Write-Output 'Running LyX headless configuration (before enabling MiKTeX AutoInstall, so its font/package probe reports missing items instead of noisily failing to auto-fetch unobtainable fonts like MinionPro/URW Garamond)...'; & $lyxPython $lyxConfigure } }\n$initexmf = Get-Command initexmf -ErrorAction SilentlyContinue\nif (-not $initexmf) { $initexmf = Get-ChildItem -Path \"$env:LOCALAPPDATA\\Programs\\MiKTeX\", \"$env:ProgramFiles\\MiKTeX\" -Filter 'initexmf.exe' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName }\nif ($initexmf) { Write-Output 'Configuring MiKTeX: enabling AutoInstall for missing packages...'; & $initexmf --set-config-value '[MPM]AutoInstall=1' }"
+        "# Post-install configuration for the LaTeX toolchain (MiKTeX / LyX).\n$env:Path = [System.Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path', 'User')\n$lyxDir = Get-ChildItem -Path $env:ProgramFiles -Directory -Filter 'LyX*' -ErrorAction SilentlyContinue | Select-Object -First 1\nif ($lyxDir) { $lyxPython = Join-Path $lyxDir.FullName 'python\\python.exe'; $lyxConfigure = Join-Path $lyxDir.FullName 'resources\\configure.py'; if ((Test-Path $lyxPython) -and (Test-Path $lyxConfigure)) { Write-Output 'Running LyX headless configuration (before enabling MiKTeX AutoInstall, so its font/package probe reports missing items instead of noisily failing to auto-fetch unobtainable fonts like MinionPro/URW Garamond)...'; & $lyxPython $lyxConfigure } }\n$initexmf = Get-Command initexmf -ErrorAction SilentlyContinue\nif (-not $initexmf) { $initexmf = Get-ChildItem -Path \"$env:LOCALAPPDATA\\Programs\\MiKTeX\", \"$env:ProgramFiles\\MiKTeX\" -Filter 'initexmf.exe' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName }\nif ($initexmf) { Write-Output 'Configuring MiKTeX: enabling AutoInstall for missing packages...'; & $initexmf --set-config-value '[MPM]AutoInstall=1' }",
+        "# Install the headroom CLI (local Claude Code token-compression proxy used by Start-ClaudeHeadroom) via uv.\n$env:Path = [System.Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path', 'User')\nuv tool install \"headroom-ai[all]\""
       ]
     }
   ],

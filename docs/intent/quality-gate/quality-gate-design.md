@@ -17,16 +17,14 @@ Verifies the repo's own source is internally correct — not end-user-facing beh
 
 Three Pester v5 spec files under `tests/`, each independently deriving `$repoRoot` via `Split-Path -Parent $PSScriptRoot` (no shared setup file):
 
-- **`DefaultJson.Tests.ps1`** — validates `default.json`'s top-level shape (`.install[]`/`.profile[]` presence), that every install entry's `source` is one of five known values (a hardcoded, manually-maintained duplicate of the source vocabulary also described in AGENTS.md), and that every `profile[]` entry whose `value` URL points under `/helpers/` resolves to an actual file in `helpers/` containing a `function <sectionName>` declaration. This is the primary automated check on the AGENTS.md-documented "two-file change" contract for adding a helper — but it only verifies the `default.json → helpers/` direction (a registered link must resolve to a real function); nothing checks the reverse.
-- **`Helpers.Tests.ps1`** — parameterized (Pester `-ForEach`, discovered via `BeforeDiscovery`) over every file in `helpers/`: confirms each parses with zero errors (`[Parser]::ParseFile`) and, after dot-sourcing the file into the live test process, that a function matching the filename-derived name exists and is callable. Dot-sourcing means any accidental top-level (non-function-body) statement in a helper would actually execute during `Invoke-Pester` — a latent risk, not evidenced by any current helper's content.
-- **`InstallScript.Tests.ps1`** — the thinnest spec: confirms `install.ps1` parses without syntax errors via the same `[Parser]::ParseFile` mechanism. Does not exercise any of `install.ps1`'s actual logic (package dispatch, profile splice, idempotency).
+- **`DefaultJson.Tests.ps1`** — validates `default.json`'s top-level shape (`.install[]`/`.profile[]` presence), that every install entry's `source` is one of five known values (a hardcoded, manually-maintained duplicate of the source vocabulary also described in AGENTS.md), that every `profile[]` entry whose `value` URL points under `/helpers/` resolves to an actual file in `helpers/` containing a `function <sectionName>` declaration, and — as of `QUALITY-010` — the reverse direction: every file in `helpers/` has a matching `profile[]` link entry. Together these two checks fully close the AGENTS.md-documented "two-file change" contract for adding a helper in both directions.
+- **`Helpers.Tests.ps1`** — parameterized (Pester `-ForEach`, discovered via `BeforeDiscovery`) over every file in `helpers/`: confirms each parses with zero errors (`[Parser]::ParseFile`), that a function matching the filename-derived name exists and is callable after dot-sourcing, and — as of `QUALITY-011` — that `Get-Help` on that function returns a `.SYNOPSIS` whose text isn't just the bare function name (the same "no real help block" heuristic `Show-DukeCommands` uses at runtime, per `DUKE-004`). Dot-sourcing means any accidental top-level (non-function-body) statement in a helper would actually execute during `Invoke-Pester` — a latent risk, not evidenced by any current helper's content.
+- **`InstallScript.Tests.ps1`** — the thinnest spec: confirms `install.ps1` parses without syntax errors via the same `[Parser]::ParseFile` mechanism. Does not exercise any of `install.ps1`'s actual logic (package dispatch, profile splice, idempotency) beyond the `Test-InstallExitCode` function extracted and tested for `BOOT-013`.
 
 ## Coverage Gaps (Observed)
 
-None of the current tests check:
-- That every file in `helpers/` has a corresponding registration in `default.json`'s `profile[]` array (only the reverse direction is checked).
-- The AGENTS.md-mandated `.SYNOPSIS` comment-based help block's presence on each helper — the exact thing `show-duke-commands` depends on for its "no description available" fallback.
-- `install.ps1`'s actual dispatch/splice/idempotency behavior beyond parse-validity.
+Still not checked by any current test (out of scope for this pass — no gap spec covers these):
+- `install.ps1`'s actual dispatch/splice/idempotency behavior beyond parse-validity and the extracted `Test-InstallExitCode` function.
 - Well-formedness of `adminCommandLine`/`commandLine` script text in `default.json`.
 - Schema validation for `optional`/`buckets` properties in `default.json`.
 
@@ -35,18 +33,20 @@ None of the current tests check:
 | Decision | Chosen | Alternatives Considered | Rationale |
 |----------|--------|--------------------------|-----------|
 | `install.ps1` never runs in CI | Parse-check only; no actual execution | Run `install.ps1` against a disposable CI VM | Explicitly documented in AGENTS.md: real package installs/profile writes aren't safe in CI. Confirmed consistent with `.github/workflows/ci.yml`'s actual job list (no install step present). |
-| Helper verification via dot-sourcing | Load each helper into the live test process and check for a matching function | Parse to AST and inspect `FunctionDefinitionAst` without executing | [inferred] Simpler to implement and directly tests "is this callable," at the cost of actually executing any top-level code in the file — a trade-off not discussed in-repo. |
-| Lint rule exclusions | Three targeted `ExcludeRules` with inline rationale | Suppress at the call site (`[Diagnostics.CodeAnalysis.SuppressMessageAttribute]`) or accept the lint failures | [inferred] Central exclusion file keeps the rationale in one place rather than scattered per-file; evidenced by the settings file's own self-documenting comment block. |
+| Helper verification via dot-sourcing | Load each helper into the live test process and check for a matching function | Parse to AST and inspect `FunctionDefinitionAst` without executing | Simpler to implement and directly tests "is this callable," at the cost of actually executing any top-level code in the file — an accepted trade-off given every current helper is a pure function definition with no top-level side effects. |
+| Lint rule exclusions | Three targeted `ExcludeRules` with inline rationale | Suppress at the call site (`[Diagnostics.CodeAnalysis.SuppressMessageAttribute]`) or accept the lint failures | Central exclusion file keeps the rationale in one place rather than scattered per-file, and documents each exclusion's justification inline for future reviewers. |
+| Reverse helper-registration check (`QUALITY-010`) | Compare `Get-ChildItem helpers/*.ps1` filenames against `profile[]` link entries' URL-derived filenames | Require manual bookkeeping; add a build-time generator that writes `profile[]` from `helpers/` | A test is cheaper than a generator for a repo this size, and directly closes the gap the existing forward-direction test left open. |
+| `.SYNOPSIS` presence check (`QUALITY-011`) | Reuse `Show-DukeCommands`' own "synopsis equals function name" heuristic in the test | Require an exact non-empty string; parse the comment block directly via AST | Keeping the test's definition of "has a real synopsis" identical to the runtime code that depends on it (`DUKE-004`) avoids the two silently drifting apart. |
 
 ## Open Questions & Future Decisions
 
 ### Resolved
-(none yet — this LLD is freshly reconstructed from code)
+1. ✅ A reverse-direction test was added (`QUALITY-010`, in `DefaultJson.Tests.ps1`): every `helpers/*.ps1` file must have a matching `default.json` profile registration.
+2. ✅ A `.SYNOPSIS` presence check was added to `Helpers.Tests.ps1` (`QUALITY-011`).
 
 ### Deferred
-1. Should a reverse-direction test be added: every `helpers/*.ps1` file has a matching `default.json` profile registration?
-2. Should a `.SYNOPSIS` presence check be added to `Helpers.Tests.ps1`?
-3. Should `InstallScript.Tests.ps1` grow beyond parse-checking (e.g. mocked coverage of the splice/idempotency behavior)?
+1. Should `InstallScript.Tests.ps1` grow beyond parse-checking and the `Test-InstallExitCode` extraction (e.g. mocked coverage of the splice/idempotency behavior)? Tied to `bootstrap`'s own deferred decision to backfill tests for its pre-existing specs — not scheduled.
+2. Should well-formedness of `adminCommandLine`/`commandLine` script text, or schema validation for `optional`/`buckets`, be added to `DefaultJson.Tests.ps1`? No gap spec currently covers these.
 
 ## References
 

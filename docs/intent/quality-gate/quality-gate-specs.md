@@ -9,5 +9,5 @@
 - [x] **QUALITY-007**: The system shall verify `install.ps1` parses with zero PowerShell syntax errors.
 - [x] **QUALITY-008**: When the lint job runs, the system shall apply PSScriptAnalyzer to `install.ps1` and `helpers/` using the repo's rule-exclusion settings, and shall fail the build if any lint result is returned.
 - [x] **QUALITY-009**: The CI pipeline shall not execute `install.ps1` itself.
-- [ ] **QUALITY-010**: The test suite shall verify that every file in `helpers/` has a corresponding `profile[]` registration in `default.json` (currently only the reverse direction — link resolves to a function — is checked).
-- [ ] **QUALITY-011**: The test suite shall verify every `helpers/*.ps1` file has a `.SYNOPSIS` comment-based help block.
+- [x] **QUALITY-010**: The test suite shall verify that every file in `helpers/` has a corresponding `profile[]` registration in `default.json`.
+- [x] **QUALITY-011**: The test suite shall verify every `helpers/*.ps1` file has a `.SYNOPSIS` comment-based help block, using the same "synopsis equals bare function name" fallback-detection heuristic `Show-DukeCommands` uses at runtime.

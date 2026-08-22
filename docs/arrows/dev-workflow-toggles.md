@@ -4,7 +4,7 @@ Three independent profile helpers that each start, stop, or launch-with-precondi
 
 ## Status
 
-**MAPPED** — sampled 2026-08-22 (git SHA `efd29bf`). Reconstructed from source during initial brownfield mapping; specs and coverage below are not yet audited against a live test run.
+**MAPPED** — sampled 2026-08-22, gap specs TOGGLE-ADB-002/TOGGLE-K8S-004 closed with tests 2026-08-22 (git SHA `efd29bf`). The 7 pre-existing `[x]` specs (ADB-001, K8S-001/002/003, CLAUDE-001/002/003) still lack tests — deliberately out of scope for this pass.
 
 ## References
 
@@ -18,7 +18,7 @@ Three independent profile helpers that each start, stop, or launch-with-precondi
 - docs/intent/dev-workflow-toggles/dev-workflow-toggles-specs.md (TOGGLE-*)
 
 ### Tests
-- (none currently — not exercised by `tests/`)
+- tests/DevWorkflowToggles.Tests.ps1
 
 ### Code
 - helpers/Start-ADBDaemon.ps1
@@ -36,16 +36,20 @@ Three independent profile helpers that each start, stop, or launch-with-precondi
 
 ## Spec Coverage
 
-Not yet written — EARS specs for this segment are generated in the next step of this bootstrap.
+| Category | Spec IDs | Implemented | Tested | Gaps |
+|----------|----------|-------------|--------|------|
+| ADB | TOGGLE-ADB-001, TOGGLE-ADB-002 | 2 | 1 | 0 |
+| Kubernetes | TOGGLE-K8S-001 to TOGGLE-K8S-004 | 4 | 2 | 0 |
+| Claude+Headroom | TOGGLE-CLAUDE-001 to TOGGLE-CLAUDE-003 | 3 | 0 | 0 |
+
+**Summary:** 9 of 9 specs implemented; 3 of 9 have dedicated tests (the two gap specs closed this pass, plus `TOGGLE-K8S-001`/`002` incidentally covered by the same test that exercises `TOGGLE-K8S-004`). `TOGGLE-CLAUDE-*` remains fully untested — deliberately out of scope for this pass.
 
 ## Key Findings
 
 1. **Grouped by shared shape, not proximity** — flagged during reconciliation and confirmed: all three share the "toggle an external dev service on/off" purpose, but each targets a fully independent tool (ADB, Rancher/Docker, Headroom) with zero shared code.
-2. **`Switch-Kubernetes` has an unbounded polling loop** — `while ($true)` with a 2-second sleep against `docker info`, no timeout or max-retry guard; a failed Docker restart hangs the function indefinitely with only the initial status message (`helpers/Switch-Kubernetes.ps1`).
-3. **`Start-ClaudeHeadroom` depends on an external `headroom` CLI** not otherwise visible anywhere in the repo (not confirmed as a `default.json` package entry) — its error-remediation message references `headroom install apply --preset persistent-docker` and `headroom proxy`.
-4. **`Start-ClaudeHeadroom` launches its nested session with `-NoProfile`** — a deliberate-looking but unstated design choice, meaning none of the other spliced helpers (including its two siblings in this segment) are available inside the launched `claude` session.
-5. **`Start-ADBDaemon` surfaces no job output or errors** — no `Receive-Job`/`-Wait`; the function returns immediately after starting the background job, so failures are invisible to the caller.
-6. **No error handling in any of the three** if the underlying external executable (`adb`, `rdctl`, `docker`) isn't on `PATH`.
+2. **`Start-ClaudeHeadroom` depends on an external `headroom` CLI**, now declared as a prerequisite in `default.json` (`uv tool install "headroom-ai[all]"`, a `commandLine` entry in the `bootstrap` segment, since `headroom` has no winget/scoop/msstore package). Its error-remediation message still references `headroom install apply --preset persistent-docker`/`headroom proxy` as manual fallback instructions.
+3. **`Start-ClaudeHeadroom` launches its nested session with `-NoProfile`** — a deliberate-looking but unstated design choice, meaning none of the other spliced helpers (including its two siblings in this segment) are available inside the launched `claude` session.
+4. **No error handling in any of the three** if the underlying external executable (`adb`, `rdctl`, `docker`) isn't on `PATH` — flagged, not fixed this pass (no gap spec covers it).
 
 ## Work Required
 
@@ -53,9 +57,8 @@ Not yet written — EARS specs for this segment are generated in the next step o
 None identified as currently broken.
 
 ### Should Fix
-1. Add a timeout/max-retry bound to `Switch-Kubernetes`'s polling loop.
-2. Surface `Start-ADBDaemon`'s background job output/errors to the caller.
-3. Confirm whether `headroom` is expected to be installed via `default.json` and either add it there or document the external prerequisite explicitly.
+None outstanding — the `headroom` install-path question is resolved.
 
 ### Nice to Have
 1. Add basic PATH/executable-presence checks with a clear error message for all three.
+2. Backfill tests for `TOGGLE-ADB-001` and `TOGGLE-CLAUDE-*` if/when full behavioral coverage becomes a priority.

@@ -1,3 +1,4 @@
+# @spec TEE-005
 function Invoke-TeeCommand {
     <#
     .SYNOPSIS
@@ -14,11 +15,21 @@ function Invoke-TeeCommand {
     # from the original call. Declaring a typed/advanced parameter to collect the
     # remaining arguments instead collapses them to plain positional values on splat,
     # breaking forwarded flags like `docker ps -a`.
+    if ($args.Count -eq 0) {
+        Write-Error "Invoke-TeeCommand requires a command to run, e.g. 'Invoke-TeeCommand docker ps' or 'Invoke-TeeCommand { docker ps -a }'."
+        return
+    }
+
     $logPath = $null
     $rest = $args
     if ($args.Count -ge 2 -and $args[0] -eq '-LogPath') {
         $logPath = $args[1]
         $rest = @($args | Select-Object -Skip 2)
+    }
+
+    if ($rest.Count -eq 0) {
+        Write-Error "Invoke-TeeCommand requires a command to run after -LogPath, e.g. 'Invoke-TeeCommand -LogPath C:\temp\out.log docker ps'."
+        return
     }
 
     if (-not $logPath) {

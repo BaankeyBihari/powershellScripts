@@ -12,5 +12,5 @@
 - [x] **BOOT-010**: When a `profile[]` entry's `type` is `"link"`, the system shall fetch `value` over HTTP and inline the downloaded content as the section body.
 - [x] **BOOT-011**: When a `profile[]` entry's `type` is `"content"`, the system shall inline `value` literally as the section body.
 - [x] **BOOT-012**: When `Get-ProfileUpdate` is invoked, the system shall download `install.ps1`'s current source from `-installUri` and invoke it with the caller's `-resourceUri`/`-installUri` values.
-- [ ] **BOOT-013**: If a package install (winget/msstore/scoop) fails, then the system shall report the failure rather than continuing the install loop silently.
-- [ ] **BOOT-014**: If `Get-ProfileUpdate`'s download or dynamic invocation of `install.ps1` fails, then the system shall surface a clear error rather than an unhandled exception.
+- [x] **BOOT-013**: If a package install (winget/msstore/scoop) fails — either by exiting non-zero or by throwing — then the system shall report the failure (per-item warning plus a final summary) rather than continuing the install loop silently.
+- [x] **BOOT-014**: If `Get-ProfileUpdate`'s download or invocation of `install.ps1` fails, then the system shall surface a clear error identifying which step failed, rather than an unhandled exception.

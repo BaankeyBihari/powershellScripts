@@ -23,8 +23,8 @@ This segment's entire mechanism depends on a convention it does not own: the `#-
 
 | Decision | Chosen | Alternatives Considered | Rationale |
 |----------|--------|--------------------------|-----------|
-| Section-list source | Regex-parse the profile file's own marker comments | Read `default.json`'s `profile[]` array directly | [inferred] Regex-parsing the live profile file reflects what's *actually* installed on this machine, not what the manifest currently says — more accurate for a "what do I have" query, at the cost of the cross-segment coupling noted above. |
-| Missing-help handling | Detect via synopsis-equals-name heuristic, print "no description available" | Require every helper to have a `.SYNOPSIS` and fail loudly if missing | [inferred] Degrades gracefully rather than blocking discovery for an undocumented helper — consistent with this being a convenience/discovery tool, not a lint gate. |
+| Section-list source | Regex-parse the profile file's own marker comments | Read `default.json`'s `profile[]` array directly | Regex-parsing the live profile file reflects what's *actually* installed on this machine, not what the manifest currently says — more accurate for a "what do I have" query, at the cost of the cross-segment coupling noted above. |
+| Missing-help handling | Detect via synopsis-equals-name heuristic, print "no description available" | Require every helper to have a `.SYNOPSIS` and fail loudly if missing | Degrades gracefully rather than blocking discovery for an undocumented helper — consistent with this being a convenience/discovery tool, not a lint gate. |
 
 ## Open Questions & Future Decisions
 

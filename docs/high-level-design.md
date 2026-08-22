@@ -28,7 +28,9 @@ A single developer (or a small number of developers using this repo as a persona
 
 ## Tenets
 
-*(not yet specified — tenets are elicited through a dedicated conversation with the user per the `linked-intent-dev` skill's Phase 1 guidance; this HLD was synthesized bottom-up from existing code during brownfield mapping, not drafted through that elicitation)*
+- **Blast radius decides how defensive to be.** Local, reversible dev-service toggles (a registry tweak, a daemon restart, a backend toggle) can stay thin with minimal error handling; anything that installs software, rewrites the profile, or runs elevated commands must fail loud rather than continuing silently past a failure.
+- **No shared abstraction across independent helpers until duplication proves costly.** Each helper hand-rolls its own retry/polling/health-check logic rather than reaching for a shared utility on the first instance of a similar pattern; only extract shared code once duplication has caused a real maintenance problem.
+- **New capability is a new file, not a new parameter.** When a helper needs to do something meaningfully different from what it does today, prefer adding a new `helpers/<Verb-Noun>.ps1` file over growing an existing helper's parameter surface — consistent with the one-function-per-file convention.
 
 ## System Design
 
