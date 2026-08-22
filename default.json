@@ -57,7 +57,6 @@
         { "id": "Mozilla.Firefox", "name": "Mozilla Firefox (en-US)" },
         { "id": "NSSM.NSSM", "name": "NSSM" },
         { "id": "Obsidian.Obsidian", "name": "Obsidian" },
-        { "id": "OBSProject.OBSStudio", "name": "OBS Studio" },
         { "id": "Ollama.Ollama", "name": "Ollama" },
         { "id": "OpenWhisperSystems.Signal", "name": "Signal" },
         { "id": "Plex.PlexMediaServer", "name": "Plex Media Server" },
@@ -66,13 +65,11 @@
         { "id": "RaspberryPiFoundation.RaspberryPiImager", "name": "Raspberry Pi Imager" },
         { "id": "rejetto.hfs", "name": "HFS (HTTP File Server)" },
         { "id": "Rustlang.Rustup", "name": "Rustup: the Rust toolchain installer" },
-        { "id": "Spotify.Spotify", "name": "Spotify" },
         { "id": "SUSE.RancherDesktop", "name": "Rancher Desktop" },
         { "id": "Stretchly.Stretchly", "name": "Stretchly" },
         { "id": "TeXstudio.TeXstudio", "name": "TeXstudio" },
         { "id": "Tonec.InternetDownloadManager", "name": "Internet Download Manager" },
         { "id": "Valve.Steam", "name": "Steam" },
-        { "id": "VideoLAN.VLC", "name": "VLC media player" },
         { "id": "YACReader.YACReader", "name": "YACReader" },
         { "id": "Zoom.Zoom", "name": "Zoom Workplace" }
       ]
@@ -83,7 +80,10 @@
       "optional": [
         { "id": "9PFHDD62MXS1", "name": "Apple Music" },
         { "id": "9NP83LWLPZ9K", "name": "Apple Devices" },
-        { "id": "9P8JQ0JJSTLL", "name": "Amazon Kindle: Reading App" }
+        { "id": "9P8JQ0JJSTLL", "name": "Amazon Kindle: Reading App" },
+        { "id": "XPFFH613W8V6LV", "name": "OBS Studio" },
+        { "id": "9NCBCSZSJRSB", "name": "Spotify" },
+        { "id": "XPDM1ZW6815MQM", "name": "VLC" }
       ]
     },
     {
