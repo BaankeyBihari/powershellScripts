@@ -27,7 +27,8 @@
         { "id": "OpenJS.NodeJS", "name": "Node.js" },
         { "id": "Oven-sh.Bun", "name": "Bun" },
         { "id": "Schniz.fnm", "name": "Fast Node Manager" },
-        { "id": "ScooterSoftware.BeyondCompare.4", "name": "Beyond Compare 4" }
+        { "id": "ScooterSoftware.BeyondCompare.4", "name": "Beyond Compare 4" },
+        { "id": "Starship.Starship", "name": "Starship" }
       ],
       "optional": [
         { "id": "ALCPU.CoreTemp", "name": "Core Temp" },
@@ -144,6 +145,11 @@
       "sectionName": "Drama",
       "type": "content",
       "value": "# No Content"
+    },
+    {
+      "sectionName": "starship",
+      "type": "content",
+      "value": "starship init powershell | Invoke-Expression"
     }
   ]
 }
